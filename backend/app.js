@@ -9,6 +9,7 @@ const documentuploadRoutes = require('./documentUpload/documentuploadRoutes'); /
 const applicationStatusRoutes = require('./applicationStatus/applicationStatusRoutes');
 const messageRoutes = require('./messages/messageRoutes');
 const paymentRoutes = require('./payment/paymentRoutes');
+const profileRoutes = require('./profile/profileRoutes');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,6 @@ app.use('/document-upload', documentuploadRoutes); // Register upload route
 app.use('/application-status', applicationStatusRoutes); // Register status route
 app.use('/messages', messageRoutes);
 app.use('/payment', paymentRoutes);
-
+app.use('/profile', profileRoutes);
 
 module.exports = app;
