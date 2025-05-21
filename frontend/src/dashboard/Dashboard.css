@@ -1,0 +1,22 @@
+.dashboard-main-content {
+  margin-left: 288px; /* 68px (fixed sidebar) + 220px (sliding sidebar) */
+  padding: 40px 32px;
+  min-height: 100vh;
+  background: #f8fff8;
+  box-sizing: border-box;
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #2c781d;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.dashboard-desc {
+  font-size: 1.15rem;
+  color: #226013;
+  max-width: 600px;
+  line-height: 1.6;
+}
