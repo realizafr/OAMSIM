@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -48,10 +48,17 @@ function FixedGreenSidebar({ onHover, onLeave }) {
   );
 }
 
-function Sidebar() {
+function Sidebar({ onExpandChange }) {
   const [collapsed, setCollapsed] = useState(false);
   const [forceExpand, setForceExpand] = useState(false);
   const navigate = useNavigate();
+
+  // Notify parent when expanded/collapsed state changes
+  useEffect(() => {
+    if (onExpandChange) {
+      onExpandChange(!collapsed || forceExpand);
+    }
+  }, [collapsed, forceExpand, onExpandChange]);
 
   // Expand sliding sidebar when hovering over fixed sidebar
   const handleFixedSidebarHover = () => setForceExpand(true);
@@ -90,8 +97,8 @@ function Sidebar() {
           <div className="sidebar-btn-row" style={{ marginTop: 30 }}>
             <button
               onClick={() => {
-                localStorage.clear();
-                navigate("/");
+                localStorage.removeItem('application_id');
+                navigate("/", { replace: true });
               }}
               style={{
                 color: "#c62828",

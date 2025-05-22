@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import "./Dashboard.css";
 
 function Dashboard() {
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+
   return (
-    <div>
-      <Sidebar />
-      <div className="dashboard-main-content">
+    <div className="dashboard-container">
+      <Sidebar onExpandChange={setSidebarExpanded} />
+      <div
+        className="dashboard-main-content"
+        style={{
+          marginLeft: sidebarExpanded ? 288 : 68, // 68px fixed + 220px expanded, or just 68px when collapsed
+          transition: "margin-left 0.2s"
+        }}
+      >
         <h1 className="dashboard-title">
           Welcome to the PTC OAMS Dashboard!
         </h1>

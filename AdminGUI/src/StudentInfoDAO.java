@@ -74,7 +74,7 @@ public class StudentInfoDAO {
     }
 
     // Helper to generate a random password
-    private static String generateRandomPassword(int length) {
+    public static String generateRandomPassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder();
         java.util.Random rand = new java.util.Random();

@@ -15,14 +15,14 @@ const db = mysql.createConnection({
 
 // Multer storage config
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: function (_, __, cb) {
     const uploadPath = path.join(__dirname, '../uploads');
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
     cb(null, uploadPath);
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     const applicationid = req.params.applicationid;
     const ext = path.extname(file.originalname);
     cb(null, `profile_${applicationid}${ext}`);
@@ -55,7 +55,8 @@ router.put('/:applicationid/picture', upload.single('profilePic'), async (req, r
     if (!req.file) {
       return res.status(400).json({ error: "No picture provided." });
     }
-    const filePath = `/profile/uploads/${req.file.filename}`; // URL to access the image
+
+    const filePath = `/uploads/${req.file.filename}`; // URL to access the image
 
     // Save file path in DB
     const [result] = await db.query(

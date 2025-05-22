@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar'; // Add this import
+import Sidebar from '../components/Sidebar';
 import './paymentInformation.css';
+import gcashLogo from '../assets/gcash.png';
+import paymayaLogo from '../assets/paymaya.png';
 
 function PaymentInformation() {
   const [methods, setMethods] = useState([]);
@@ -83,7 +85,19 @@ function PaymentInformation() {
     }
   };
 
-  const selectedDetails = methods.find(m => m.type === selectedMethod)?.details;
+  // Icon selection based on method type
+  const getMethodIcon = (type) => {
+    switch (type) {
+      case 'GCash':
+        return <img src={gcashLogo} alt="GCash Logo" className="method-icon" />;
+      case 'PayMaya':
+        return <img src={paymayaLogo} alt="PayMaya Logo" className="method-icon" />;
+      case 'Bank Transfer':
+        return <span role="img" aria-label="Bank" className="method-icon">🏦</span>;
+      default:
+        return <span role="img" aria-label="Payment" className="method-icon">💳</span>;
+    }
+  };
 
   return (
     <div style={{ display: "flex" }}>
@@ -108,7 +122,10 @@ function PaymentInformation() {
                   setAmount(m.details.amount);
                 }}
               >
-                <div className="payment-method-title">{m.type}</div>
+                <div className="payment-method-title">
+                  {getMethodIcon(m.type)}
+                  {m.type}
+                </div>
                 <div className="payment-method-details">
                   {m.type === 'GCash' || m.type === 'PayMaya' ? (
                     <ul>
@@ -173,7 +190,7 @@ function PaymentInformation() {
             </label>
             {screenshotUrl && (
               <div className="payment-screenshot-preview">
-                <img src={screenshotUrl} alt="Screenshot Preview" style={{ maxWidth: 200, marginTop: 8 }} />
+                <img src={screenshotUrl} alt="Screenshot Preview" />
               </div>
             )}
             <button type="submit">Submit Payment</button>

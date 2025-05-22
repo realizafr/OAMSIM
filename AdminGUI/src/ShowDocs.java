@@ -1,20 +1,24 @@
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class ShowDocs {
-    public static void openDocumentsFolder(Component parent, String applicationId) {
-        // Adjust the path as needed for your project structure
-        String folderPath = System.getProperty("user.dir") + "/../backend/uploads/" + applicationId;
-        File folder = new File(folderPath);
-        if (!folder.exists() || !folder.isDirectory()) {
-            JOptionPane.showMessageDialog(parent, "Folder does not exist:\n" + folderPath);
-            return;
-        }
-        try {
-            Desktop.getDesktop().open(folder);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(parent, "Could not open folder:\n" + folderPath + "\n" + ex.getMessage());
+    /**
+     * Opens the folder for the given applicationId in backend/uploads/[application_id].
+     * @param parent The parent frame (for dialog positioning).
+     * @param applicationId The application ID.
+     */
+    public static void openDocumentsFolder(JFrame parent, String applicationId) {
+        File folder = new File("../backend/uploads/" + applicationId);
+        if (folder.exists() && folder.isDirectory()) {
+            try {
+                Desktop.getDesktop().open(folder.getCanonicalFile());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(parent, "Error opening folder:\n" + ex.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(parent, "Document folder not found.");
         }
     }
 }

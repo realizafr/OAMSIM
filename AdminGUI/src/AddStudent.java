@@ -100,36 +100,68 @@ public class AddStudent extends JDialog {
         setVisible(true);
     }
 
-    private void generateCredentials() {
-        try {
-            String[] creds = StudentInfoDAO.generateNextAppIdAndPassword();
-            generatedAppId = creds[0];
-            generatedPassword = creds[1];
-            appIdLabel.setText("Application ID: " + generatedAppId);
-            passwordLabel.setText("Password: " + generatedPassword);
-            statusLabel.setText(" ");
-        } catch (Exception ex) {
-            appIdLabel.setText("Application ID: ERROR");
-            passwordLabel.setText("Password: ERROR");
-            statusLabel.setText("Error: " + ex.getMessage());
-        }
-    }
+   private void generateCredentials() {
+    try {
+        // Get current month and year
+        java.time.LocalDate now = java.time.LocalDate.now();
+        String mm = String.format("%02d", now.getMonthValue());
+        String yy = String.format("%02d", now.getYear() % 100);
 
-    private void addStudent() {
-        String email = emailField.getText().trim();
-        if (email.isEmpty()) {
-            statusLabel.setText("Email required.");
-            return;
+        // Query DB for the highest increment for this MMYY
+        String prefix = mm + yy + "_";
+        int maxIncrement = 0;
+        java.sql.Connection conn = DatabaseConnection.getConnection();
+        java.sql.PreparedStatement stmt = conn.prepareStatement(
+            "SELECT application_id FROM student_info WHERE application_id LIKE ?"
+        );
+        stmt.setString(1, prefix + "%");
+        java.sql.ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String appId = rs.getString("application_id");
+            String[] parts = appId.split("_");
+            if (parts.length == 2) {
+                try {
+                    int inc = Integer.parseInt(parts[1]);
+                    if (inc > maxIncrement) maxIncrement = inc;
+                } catch (NumberFormatException ignored) {}
+            }
         }
-        try {
-            StudentInfoDAO.insertStudentWithCredentials(generatedAppId, email, generatedPassword);
-            statusLabel.setText("Added: " + generatedAppId);
-            addButton.setEnabled(false);
-        } catch (Exception ex) {
-            statusLabel.setText("Error: " + ex.getMessage());
-        }
-    }
+        rs.close();
+        stmt.close();
+        conn.close();
 
+        int nextIncrement = maxIncrement + 1;
+        String newAppId = prefix + String.format("%04d", nextIncrement);
+
+        generatedAppId = newAppId;
+        // Keep the random password logic as is
+        generatedPassword = StudentInfoDAO.generateRandomPassword(nextIncrement);
+        appIdLabel.setText("Application ID: " + generatedAppId);
+        passwordLabel.setText("Password: " + generatedPassword);
+        statusLabel.setText(" ");
+    } catch (Exception ex) {
+        appIdLabel.setText("Application ID: ERROR");
+        passwordLabel.setText("Password: ERROR");
+        statusLabel.setText("Error: " + ex.getMessage());
+    }
+}
+
+private void addStudent() {
+    String email = emailField.getText().trim();
+    if (email.isEmpty()) {
+        statusLabel.setText("Email required.");
+        return;
+    }
+    try {
+        // Use the generatedAppId and generatedPassword as before
+        StudentInfoDAO.insertStudentWithCredentials(generatedAppId, email, generatedPassword);
+        statusLabel.setText("Added: " + generatedAppId);
+        addButton.setEnabled(false);
+    } catch (Exception ex) {
+        statusLabel.setText("Error: " + ex.getMessage());
+    }
+}
+//copy info button to clipboard function
     private void copyInfo() {
         String info = "Username: \"" + generatedAppId + "\"\nPassword: \"" + generatedPassword + "\"";
         StringSelection selection = new StringSelection(info);

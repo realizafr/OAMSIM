@@ -16,11 +16,11 @@ class ViewFrame extends JFrame {
     public ViewFrame() {
         setTitle("Student Info");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setSize(900, 600);
         setLocationRelativeTo(null);
 
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(0, 3, 5, 5));
+        buttonPanel.setLayout(new GridBagLayout());
         statusLabel = new JLabel(" ");
 
         // --- Top bar with Add Student (75%) and Refresh (25%) ---
@@ -66,26 +66,22 @@ class ViewFrame extends JFrame {
                 statusLabel.setText("No students found.");
                 return;
             }
-            for (String id : ids) {
-                // Split the id into prefix and numeric part
-                String prefix = id;
-                String number = "";
-                int dashIdx = id.lastIndexOf('-');
-                if (dashIdx != -1 && dashIdx < id.length() - 1) {
-                    prefix = id.substring(0, dashIdx + 1);
-                    number = id.substring(dashIdx + 1);
-                }
-                // HTML for two rows, second row bold and larger
-                String buttonText = "<html><div style='text-align:center;'>" +
-                        prefix + "<br>" +
-                        "<span style='font-size:24pt; font-weight:bold;'>" + number + "</span>" +
-                        "</div></html>";
-                JButton btn = new JButton(buttonText);
-                btn.setVerticalTextPosition(SwingConstants.CENTER);
-                btn.setHorizontalTextPosition(SwingConstants.CENTER);
-                btn.addActionListener(e -> showStudentInfo(id));
-                buttonPanel.add(btn);
-            }
+            buttonPanel.removeAll();
+int maxRows = 10; // Number of rows before starting a new column (adjust as needed)
+GridBagConstraints gbc = new GridBagConstraints();
+gbc.insets = new Insets(10, 10, 10, 10);
+gbc.fill = GridBagConstraints.NONE;
+gbc.anchor = GridBagConstraints.NORTHWEST;
+
+for (int i = 0; i < ids.size(); i++) {
+    String id = ids.get(i);
+    JButton btn = new JButton(id);
+    btn.setPreferredSize(new Dimension(150, 50));
+    btn.addActionListener(e -> showStudentInfo(id));
+    gbc.gridx = i / maxRows; // column
+    gbc.gridy = i % maxRows; // row
+    buttonPanel.add(btn, gbc);
+}
             buttonPanel.revalidate();
             buttonPanel.repaint();
         } catch (Exception ex) {
@@ -119,12 +115,13 @@ class StudentInfoFrame extends JFrame {
         backButton.addActionListener(e -> dispose());
 
         // Open documents button
-        JButton showDocsButton = new JButton("Show Documents");
+        JButton showDocsButton = new JButton("Verify Documents");
         showDocsButton.setFont(new Font("Arial", Font.PLAIN, 16));
         showDocsButton.setPreferredSize(new Dimension(180, 35));
-        showDocsButton.addActionListener(e -> {
-            ShowDocs.openDocumentsFolder(this, info.getOrDefault("application_id", ""));
-        });
+        // ...existing code...
+showDocsButton.addActionListener(e -> {
+    VerifyDocs.showVerifyDocumentsFrame(this, info.getOrDefault("application_id", ""));
+});
 
         // Delete button
         JButton deleteButton = new JButton("Delete");
@@ -137,11 +134,34 @@ class StudentInfoFrame extends JFrame {
             }
         });
 
-        // Top panel for back, show docs, and delete buttons
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(backButton, BorderLayout.WEST);
-        topPanel.add(deleteButton, BorderLayout.EAST);
-        topPanel.add(showDocsButton, BorderLayout.CENTER);
+       // New Show Documents button
+JButton showFolderButton = new JButton("Show Documents");
+showFolderButton.setFont(new Font("Arial", Font.PLAIN, 16));
+showFolderButton.setPreferredSize(new Dimension(180, 35));
+showFolderButton.addActionListener(e -> {
+    String appId = info.getOrDefault("application_id", "");
+    java.io.File folder = new java.io.File("../backend/uploads/" + appId);
+    if (folder.exists() && folder.isDirectory()) {
+        try {
+            Desktop.getDesktop().open(folder.getCanonicalFile());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error opening folder:\n" + ex.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Document folder not found.");
+    }
+});
+
+// Panel for the two buttons in 50:50 ratio
+JPanel docsPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+docsPanel.add(showDocsButton);
+docsPanel.add(showFolderButton);
+
+// Top panel for back, docsPanel, and delete buttons
+JPanel topPanel = new JPanel(new BorderLayout());
+topPanel.add(backButton, BorderLayout.WEST);
+topPanel.add(deleteButton, BorderLayout.EAST);
+topPanel.add(docsPanel, BorderLayout.CENTER);
 
         // Get column order from DB
         java.util.List<String> columnOrder = new java.util.ArrayList<>();
