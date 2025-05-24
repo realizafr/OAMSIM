@@ -66,7 +66,7 @@
   border-radius: 12px;
   padding: 20px;
   cursor: pointer;
-  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s, transform 0.18s;
   min-width: 220px;
   box-shadow: 0 1px 4px #e5e7eb;
 }
@@ -75,6 +75,14 @@
   border: 2px solid #1976d2;
   background: #e3f0ff;
   box-shadow: 0 2px 8px #e3eafc;
+}
+
+.payment-method:hover {
+  border: 2px solid #1976d2;
+  background: #e3f0ff;
+  box-shadow: 0 4px 16px #b5d6c2;
+  transform: translateY(-3px) scale(1.03);
+  z-index: 1;
 }
 
 .payment-method-title {
@@ -97,8 +105,18 @@
 }
 
 .gcash-icon {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
+}
+
+.bank-icon {
+  width: 46px;
+  height: 46px;
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .payment-method-details ul {
@@ -188,21 +206,25 @@
 }
 
 .payment-form button {
-  background: #00a81f;
+  background: linear-gradient(90deg, #39e46a 0%, #36e46a 60%, #15803d 100%);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 12px 0;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
   transition: background 0.2s;
-  box-shadow: 0 1px 4px #b5d6c2;
+  box-shadow: 0 1px 12px #b5d6c2;
+  width: 935px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .payment-form button:hover {
-  background: #15803d;
+  background: linear-gradient(90deg, #39e46a 0%, #15803d 100%);
 }
 
 .payment-status-message {

@@ -694,10 +694,11 @@ function ApplicationForm() {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+               justifyContent: "flex-end",
               marginTop: 32,
               width: "100%",
-              maxWidth: 600,
+              maxWidth: 900,
+              gap: 270,  
             }}
           >
             {step > 0 ? (
@@ -727,7 +728,10 @@ function ApplicationForm() {
             ) : (
               <div style={{ width: 140 }} />
             )}
-             <div style={{ flex: 25 }} /> {/* This adds space between the buttons */}
+
+            {/* Invisible spacer div between buttons */}
+            <div style={{ width: 80,  color: "#fff"}} /> {/* Adjust width here as needed */}
+
             {step < steps.length - 1 && (
               <button
                 type="button"
@@ -747,6 +751,7 @@ function ApplicationForm() {
                   gap: 8,
                   boxShadow: "0 2px 8px rgba(44, 120, 29, 0.08)",
                   transition: "background 0.2s, color 0.2s",
+                   marginLeft: step > 0 ? 18 : 0, // space if Previous is visible
                 }}
                 onClick={nextStep}
               >

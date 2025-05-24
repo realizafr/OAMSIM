@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import './paymentInformation.css';
-import gcashLogo from '../assets/gcash.png';
-import paymayaLogo from '../assets/paymaya.png';
+import gcashLogo from './assets/gcash.png';
+import paymayaLogo from './assets/paymaya.png';
+import bankLogo from './assets/bank.jpg';
 
 function PaymentInformation() {
   const [methods, setMethods] = useState([]);
@@ -93,18 +94,18 @@ useEffect(() => {
   };
 
   // Icon selection based on method type
-  const getMethodIcon = (type) => {
-    switch (type) {
-      case 'GCash':
-        return <img src={gcashLogo} alt="GCash Logo" className="method-icon" />;
-      case 'PayMaya':
-        return <img src={paymayaLogo} alt="PayMaya Logo" className="method-icon" />;
-      case 'Bank Transfer':
-        return <span role="img" aria-label="Bank" className="method-icon">🏦</span>;
-      default:
-        return <span role="img" aria-label="Payment" className="method-icon">💳</span>;
-    }
-  };
+const getMethodIcon = (type) => {
+  switch (type) {
+    case 'GCash':
+      return <img src={gcashLogo} alt="GCash" className="gcash-icon" />;
+    case 'PayMaya':
+      return <img src={paymayaLogo} alt="PayMaya Logo" className="method-icon" />;
+    case 'Bank Transfer':
+      return <img src={bankLogo} alt="Bank Logo" className="bank-icon" />; // Use bank-icon class for custom size
+    default:
+      return <span role="img" aria-label="Payment" className="method-icon">💳</span>;
+  }
+};
 
   return (
     <div style={{ display: "flex" }}>

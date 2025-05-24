@@ -111,6 +111,7 @@
   cursor: pointer;
   transition: border 0.18s, background 0.18s;
   text-align: center;
+   white-space: nowrap;
 }
 
 .documents-upload-file-btn:hover,

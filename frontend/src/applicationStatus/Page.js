@@ -137,8 +137,8 @@ const ApplicationStatus = () => {
       <Sidebar />
       <div className="app-status-container">
         {/* --- Application Details Section --- */}
-        <div className="app-details-section" style={{ marginBottom: 32, padding: 16, background: "#669966", borderRadius: 10 }}>
-          <h3 style={{ margin: 0, marginBottom: 8 }}>Application Details</h3>
+        <div className="app-details-section" style={{ marginBottom: 32, padding: 16, background: "#50a845",  borderRadius: 10 }}>
+          <h3 style={{ margin: 0, color: "#000000", marginBottom: 8 }}>Application Details</h3>
           {appDetails ? (
             <div>
               <div><strong>Application Number:</strong> {appDetails.application_id}</div>

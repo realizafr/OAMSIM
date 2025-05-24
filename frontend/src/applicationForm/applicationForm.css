@@ -96,6 +96,9 @@
   cursor: pointer;
   transition: background 0.18s, box-shadow 0.18s, transform 0.16s;
   box-shadow: 0 2px 12px rgba(44, 120, 29, 0.10);
+  margin-left: auto;   /* This moves the button to the far right */
+  margin-right: 0;
+  display: block;
 }
 
 .application-form-button:hover,

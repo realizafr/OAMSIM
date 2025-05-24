@@ -2,7 +2,7 @@
   max-width: 600px;
   margin: 40px auto;
   padding: 32px 32px 32px 32px;
-  background: #15803d;
+  background: #f0ffee;
   border-radius: 16px;
   box-shadow: 0 2px 16px rgba(44,120,29,0.06);
 }
@@ -14,9 +14,22 @@
   margin-bottom: 0.25em;
 }
 
+.app-status-header {
+  color: #000000; /* Use your desired color */
+}
+
+.app-details-section {
+  color: #000000; /* Use your desired color */
+}
+
+.app-details-section .application-details-title {
+  color: #000000;  
+  /* Add this class to your Application Details title in your JSX/HTML */
+}
+
 .timeline-subheader,
 .app-status-subheader {
-  color: #d8d8d8;
+  color: #000000;
   margin-bottom: 3.5em;
   font-size: 1.15rem;
 }
@@ -43,7 +56,7 @@
   top: 38px;
   width: 3px;
   height: calc(100% - -35px);
-  background: #ffffff;
+  background: #000000;
   z-index: 0;
 }
 
@@ -81,13 +94,13 @@
 }
 
 .timeline-desc {
-  color: #ffffff;
+  color: #000000;
   font-size: 1rem;
   margin-bottom: 2px;
 }
 
 .timeline-date {
-  color: #888;
+  color: #888888;
   font-size: 0.95rem;
 }
 
@@ -139,7 +152,7 @@
 .app-status-doc-details {
   margin-top: 4px;
   font-size: 0.98rem;
-  color: #ffd0d0;
+  color: #ffb1b1;
 }
 
 @media (max-width: 700px) {
