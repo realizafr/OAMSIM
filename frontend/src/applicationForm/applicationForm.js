@@ -9,6 +9,17 @@ const steps = [
   { label: "Review & Submit" },
 ];
 
+const programOptions = [
+  { value: "BSIT", label: "BS Information Technology" },
+  { value: "BSOA", label: "BS Office Administration" },
+  { value: "CCS", label: "Certificate in Computer Sciences" },
+  { value: "COA", label: "Certificate in Office Administration" },
+  { value: "ABA", label: "Associate in Business Administration" },
+  { value: "AAIS", label: "Associate in Accounting Information System" },
+  { value: "AHRD", label: "Associate in Human Resource Development" },
+  { value: "AHRT", label: "Associate in Hotel and Restaurant Technology" },
+];
+
 // Helper: required fields for each step
 const requiredFields = [
   [
@@ -451,7 +462,15 @@ function ApplicationForm() {
                 </label>
                 <label className="application-form-label">
                   <span>Birthdate <span className="application-form-required">*</span></span>
-                  <input className="application-form-input" type="date" name="birthdate" value={formData.birthdate} onChange={handleChange} required />
+                  <input
+                    className="application-form-input"
+                    type="date"
+                    name="birthdate"
+                    value={formData.birthdate}
+                    onChange={handleChange}
+                    required
+                    max={new Date().toISOString().split('T')[0]} // Prevent future dates
+                  />
                   {errors.birthdate && <span className="application-form-required">{errors.birthdate}</span>}
                 </label>
                 <label className="application-form-label">
@@ -469,7 +488,6 @@ function ApplicationForm() {
                     <option value="">Select status</option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
-                    <option value="Divorced">Divorced</option>
                     <option value="Widowed">Widowed</option>
                   </select>
                   {errors.civilStatus && <span className="application-form-required">{errors.civilStatus}</span>}
@@ -557,31 +575,37 @@ function ApplicationForm() {
               <div className="application-form-grid">
                 <label className="application-form-label">
                   <span>First Choice <span className="application-form-required">*</span></span>
-                  <select className="application-form-select" name="firstChoice" value={formData.firstChoice} onChange={handleChange} required>
-                    <option value="">Select first choice</option>
-                    <option value="BSIT">BSIT</option>
-                    <option value="BSCS">BSCS</option>
-                    <option value="BSCE">BSCE</option>
-                    <option value="BSEE">BSEE</option>
-                    <option value="BSME">BSME</option>
-                    <option value="BSA">BSA</option>
-                    <option value="BSBA">BSBA</option>
-                    <option value="BSED">BSED</option>
+                  <select
+                    className="application-form-select"
+                    name="firstChoice"
+                    value={formData.firstChoice}
+                    onChange={handleChange}
+                    required
+                  >
+                    {programOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </select>
                   {errors.firstChoice && <span className="application-form-required">{errors.firstChoice}</span>}
                 </label>
                 <label className="application-form-label">
                   <span>Second Choice <span className="application-form-required">*</span></span>
-                  <select className="application-form-select" name="secondChoice" value={formData.secondChoice} onChange={handleChange} required>
-                    <option value="">Select second choice</option>
-                    <option value="BSIT">BSIT</option>
-                    <option value="BSCS">BSCS</option>
-                    <option value="BSCE">BSCE</option>
-                    <option value="BSEE">BSEE</option>
-                    <option value="BSME">BSME</option>
-                    <option value="BSA">BSA</option>
-                    <option value="BSBA">BSBA</option>
-                    <option value="BSED">BSED</option>
+                  <select
+                    className="application-form-select"
+                    name="secondChoice"
+                    value={formData.secondChoice}
+                    onChange={handleChange}
+                    required
+                  >
+                    {programOptions
+                      .filter((option) => option.value !== formData.firstChoice)
+                      .map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                   </select>
                   {errors.secondChoice && <span className="application-form-required">{errors.secondChoice}</span>}
                 </label>

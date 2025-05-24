@@ -278,4 +278,7 @@
   box-shadow: 0 2px 12px rgba(44, 120, 29, 0.13);
 }
 
-
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .profiles-content {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
+}

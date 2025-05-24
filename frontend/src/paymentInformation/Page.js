@@ -16,27 +16,22 @@ function PaymentInformation() {
   const [history, setHistory] = useState([]);
   const applicationId = localStorage.getItem('application_id');
 
-useEffect(() => {
-  fetch('http://localhost:5000/payment/methods')
-    .then(res => res.json())
-    .then(setMethods)
-    .catch(() => setStatus('Unable to connect to payment server.'));
-
-  // Fetch payment history
-  if (applicationId) {
-    fetch(`http://localhost:5000/payment/history/${applicationId}`)
+  useEffect(() => {
+    fetch('http://localhost:5000/payment/methods')
       .then(res => res.json())
-      .then(data => {
-        // Ensure data is always an array
-        if (Array.isArray(data)) {
-          setHistory(data);
-        } else {
-          setHistory([]);
-        }
-      })
-      .catch(() => setHistory([]));
-  }
-}, [applicationId]);
+      .then(setMethods)
+      .catch(() => setStatus('Unable to connect to payment server.'));
+
+    // Fetch payment history
+    if (applicationId) {
+      fetch(`http://localhost:5000/payment/history/${applicationId}`)
+        .then(res => res.json())
+        .then(data => {
+          setHistory(Array.isArray(data) ? data : []);
+        })
+        .catch(() => setHistory([]));
+    }
+  }, [applicationId]);
 
   const handleScreenshotChange = (e) => {
     setScreenshot(e.target.files[0]);
@@ -85,7 +80,9 @@ useEffect(() => {
       if (applicationId) {
         fetch(`http://localhost:5000/payment/history/${applicationId}`)
           .then(res => res.json())
-          .then(setHistory)
+          .then(data => {
+            setHistory(Array.isArray(data) ? data : []);
+          })
           .catch(() => setHistory([]));
       }
     } catch (err) {
@@ -94,18 +91,18 @@ useEffect(() => {
   };
 
   // Icon selection based on method type
-const getMethodIcon = (type) => {
-  switch (type) {
-    case 'GCash':
-      return <img src={gcashLogo} alt="GCash" className="gcash-icon" />;
-    case 'PayMaya':
-      return <img src={paymayaLogo} alt="PayMaya Logo" className="method-icon" />;
-    case 'Bank Transfer':
-      return <img src={bankLogo} alt="Bank Logo" className="bank-icon" />; // Use bank-icon class for custom size
-    default:
-      return <span role="img" aria-label="Payment" className="method-icon">💳</span>;
-  }
-};
+  const getMethodIcon = (type) => {
+    switch (type) {
+      case 'GCash':
+        return <img src={gcashLogo} alt="GCash" className="gcash-icon" />;
+      case 'PayMaya':
+        return <img src={paymayaLogo} alt="PayMaya Logo" className="method-icon" />;
+      case 'Bank Transfer':
+        return <img src={bankLogo} alt="Bank Logo" className="bank-icon" />;
+      default:
+        return <span role="img" aria-label="Payment" className="method-icon">💳</span>;
+    }
+  };
 
   return (
     <div style={{ display: "flex" }}>
@@ -208,31 +205,33 @@ const getMethodIcon = (type) => {
 
         <h3 style={{marginTop: 32}}>Payment History</h3>
         <div className="payment-history">
-          {history.length === 0 ? (
+          {Array.isArray(history) && history.length === 0 ? (
             <div>No payment history found.</div>
           ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Method</th>
-                  <th>Reference #</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map((item) => (
-                  <tr key={item.id}>
-                    <td>{new Date(item.created_at).toLocaleString()}</td>
-                    <td>{item.method}</td>
-                    <td>{item.reference_number}</td>
-                    <td>₱{Number(item.amount).toLocaleString()}</td>
-                    <td>{item.status}</td>
+            Array.isArray(history) && (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Reference #</th>
+                    <th>Amount</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {history.map((item) => (
+                    <tr key={item.id}>
+                      <td>{new Date(item.created_at).toLocaleString()}</td>
+                      <td>{item.method}</td>
+                      <td>{item.reference_number}</td>
+                      <td>₱{Number(item.amount).toLocaleString()}</td>
+                      <td>{item.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )
           )}
         </div>
       </div>

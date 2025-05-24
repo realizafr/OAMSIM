@@ -16,6 +16,10 @@
   align-items: flex-start;
 }
 
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .messages-content {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
+}
 /* --- PTCL logo at the top when expanded --- */
 .ptc-logo {
   display: block;

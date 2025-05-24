@@ -1,5 +1,4 @@
 body {
-  /* Two-color gradient background for the whole page */
   background: linear-gradient(
     135deg,
     #e5f2e5 0%,
@@ -12,12 +11,11 @@ body {
 
 /* Fixed Sidebar Styles */
 .fixed-green-sidebar {
-  position: fixed; /* This keeps it in place when scrolling */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 68px; /* Fixed width */
+  width: 68px;
   height: 100vh;
-  /* Made more transparent by reducing alpha values */
   background: linear-gradient(135deg, rgba(39, 94, 43, 0.3) 0%, rgba(212, 226, 209, 0.05) 100%);
   z-index: 200;
   display: flex;
@@ -25,8 +23,8 @@ body {
   align-items: center;
   padding-top: 18px;
   box-shadow: none;
-  border-right: none; /* Already removed */
-  backdrop-filter: none; /* Removed blur for clearer appearance */
+  border-right: none;
+  backdrop-filter: none;
 }
 
 .sidebar-logo-fixed {
@@ -48,8 +46,8 @@ body {
 .sidebar-nav-fixed {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  margin-top: 18px;
+  gap: 18px; /* Must match .sidebar-btns-aligner gap */
+  margin-top: 25px;
 }
 
 .sidebar-nav-fixed a {
@@ -60,23 +58,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 47px; /* Must match .sidebar-btn-row button min-height */
 }
 
-.sidebar-nav-fixed a:hover,
-.sidebar-nav-fixed a.active {
-  color: #eaffea;
+.sidebar-fixed-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 /* Expanding Sidebar (messages-sidebar) Styles */
 .messages-sidebar {
   position: fixed !important;
-  top: 0;
+  top: 20;
   left: 68px;
   height: 100vh;
-  /* Made more transparent by reducing alpha values */
   background: linear-gradient(135deg, rgba(248, 250, 249, 0.3) 10%, rgba(226, 226, 226, 0.05) 90%) !important;
   box-shadow: none !important;
-  border-left: none !important; /* Already removed */
+  border-left: none !important;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -84,12 +83,11 @@ body {
   overflow: hidden;
   user-select: none;
   width: 220px;
-  padding: 30px 30px 280px 30px;
+  padding: 18px 30px 280px 30px; /* padding-top matches .fixed-green-sidebar */
   opacity: 1;
   pointer-events: auto;
-  /* MODIFIED: Increased duration and changed easing for smoother transition */
   transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
-  backdrop-filter: none; /* Removed blur for clearer appearance */
+  backdrop-filter: none;
 }
 
 .messages-sidebar.collapsed {
@@ -99,12 +97,20 @@ body {
   pointer-events: none;
 }
 
+.sidebar-content-wrapper {
+  width: 100%;
+}
+
 .ptc-oams-text {
-  margin: 10px 0 30px 0;
   width: 100%;
   text-align: center;
   opacity: 1;
   transition: opacity 0.3s ease-out;
+  height: 38px; /* Matches .sidebar-logo-fixed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 35px; /* Matches .sidebar-logo-fixed margin-bottom */
 }
 
 .messages-sidebar.collapsed .ptc-oams-text {
@@ -112,50 +118,58 @@ body {
   pointer-events: none;
 }
 
-/* Sidebar Button Rows (Content element) */
+/* Align buttons with icons */
+.sidebar-btns-aligner {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; /* Matches .sidebar-nav-fixed gap */
+}
+
+/* Sidebar Button Rows */
 .sidebar-btn-row {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   width: 100%;
-  min-height: 15px;
+  min-height: 0px; /* Matches .sidebar-nav-fixed a height */
   opacity: 1;
   transition: opacity 0.3s ease-out;
 }
 
-.messages-sidebar.collapsed .sidebar-btn-row {
+.messages-sidebar.collapsed {
   opacity: 0;
   pointer-events: none;
 }
 
-/* Individual Buttons (Inner content of button rows) */
+/* Individual Buttons */
 .sidebar-btn-row button {
   display: flex;
-  align-items: center;
+  align-items: left;
   justify-content: flex-start;
-  gap: 12px; /* Space between icon and text */
   width: 100%;
-  margin-bottom: -5px;
   background: none;
   border: none;
-  padding: 16px 0 16px 16px; /* Add left padding for icon */
-  font-size: 1rem;
+  padding: 0 0 0 5px;      /* Increase left padding if desired */
+  font-size: 1rem;       /* Increase font size */
   font-weight: 500;
   letter-spacing: 0.02em;
   color: #3f423e;
-  text-align: left;
+  text-align: left ! important;
   cursor: pointer;
   transition: background 0.15s cubic-bezier(0.4,0,0.2,1),
               color 0.15s cubic-bezier(0.4,0,0.2,1),
-              box-shadow 0.15s cubic-bezier(0.4,0,0.2,1); /* Removed border-color from transition */
+              box-shadow 0.15s cubic-bezier(0.4,0,0.2,1);
+  min-height: 0px;         /* Increase button height */
 }
 
-.sidebar-btn-row button img {
-  width: 22px;
-  height: 22px;
-  object-fit: contain;
+.sidebar-btn-row button span {
   display: inline-block;
+  text-align: left;
+  justify-content: flex-start;
   vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
 .sidebar-btn-row button.hovered,
@@ -163,21 +177,21 @@ body {
 .sidebar-btn-row button:focus {
   background: #2c781d;
   color: #fff;
-  border-bottom: none; /* Removed border on hover/focus */
+  border-bottom: none;
   box-shadow: 0 4px 16px rgba(44, 120, 29, 0.13);
 }
 
 .sidebar-btn-row button:active {
   background: #226013;
   color: #fff;
-  border-bottom: none; /* Removed border on active */
+  border-bottom: none;
   transform: scale(0.98);
 }
 
 .sidebar-btn-row button.active {
   background: #2c781d;
   color: #ffffff;
-  border-bottom: none; /* Removed border on active class */
+  border-bottom: none;
 }
 
 /* Sign Out Button Specific Styles */
@@ -188,8 +202,8 @@ body {
 .sign-out-button {
   color: #c62828;
   font-weight: 700;
-  margin-left: 4px; /* Maintain small margin for icon alignment */
-  border-bottom: none; /* Removed border */
+  margin-left: 4px;
+  border-bottom: none;
 }
 
 .sign-out-button.hovered,
@@ -197,15 +211,8 @@ body {
 .sign-out-button:focus {
   background: #c62828;
   color: #fff;
-  border-bottom: none; /* Removed border on hover/focus */
+  border-bottom: none;
   box-shadow: 0 4px 16px rgba(198, 40, 40, 0.13);
-}
-
-/* Removed old collapsed rules that are now redundant or conflicting with new approach */
-.messages-sidebar.collapsed .sidebar-logo,
-.messages-sidebar.collapsed .sidebar-btn-logo,
-.messages-sidebar .sidebar-icon {
-  display: none;
 }
 
 /* Add left margin to main content to avoid overlap */
@@ -213,7 +220,8 @@ body {
   .app-status-container,
   .documents-upload-container,
   .payment-container {
-    /* Adjust this margin to be slightly more than the expanded sidebar width (68px fixed + 220px expanded) */
-    margin-left: calc(68px + 220px + 20px); /* Example: 68 + 220 + some gap */
+    margin-left: calc(68px + 220px + 20px);
   }
 }
+
+

@@ -182,6 +182,11 @@
   margin-left: 6px;
 }
 
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .application-form-container {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
+}
 .application-form-review-empty {
   color: #aaa;
 }
+

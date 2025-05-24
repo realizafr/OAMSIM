@@ -125,7 +125,7 @@ function Profile() {
   };
 
   return (
-    <div>
+    <div> 
       {/* Tab Bar (Top Right) */}
       <Tabbar profile={{ ...profile, profile_pic: profilePic || profile.profile_pic }} />
 
