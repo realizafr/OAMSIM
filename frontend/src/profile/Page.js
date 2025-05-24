@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Tabbar from "../components/TabBar";
+import Sidebar from "../components/Sidebar"; // <-- Import Sidebar
 
 function Profile() {
   const [profile, setProfile] = useState(null);
@@ -128,6 +129,9 @@ function Profile() {
       {/* Tab Bar (Top Right) */}
       <Tabbar profile={{ ...profile, profile_pic: profilePic || profile.profile_pic }} />
 
+      {/* Sidebar */}
+      <Sidebar />
+
       {/* Main Content with sidebar */}
       <div style={{
         display: "flex",
@@ -135,9 +139,10 @@ function Profile() {
         background: "#f8fafc",
         minHeight: "100vh",
         fontFamily: "Inter, Arial, sans-serif",
-        marginTop: 56
+        marginTop: 56,
+        marginLeft: 68 // <-- Add margin to avoid overlap with Sidebar
       }}>
-        {/* Sidebar */}
+        {/* Sidebar content and main content remain unchanged */}
         <div style={{
           width: 350,
           background: "#fff",

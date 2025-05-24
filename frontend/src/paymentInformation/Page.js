@@ -15,20 +15,27 @@ function PaymentInformation() {
   const [history, setHistory] = useState([]);
   const applicationId = localStorage.getItem('application_id');
 
-  useEffect(() => {
-    fetch('http://localhost:5000/payment/methods')
-      .then(res => res.json())
-      .then(setMethods)
-      .catch(() => setStatus('Unable to connect to payment server.'));
+useEffect(() => {
+  fetch('http://localhost:5000/payment/methods')
+    .then(res => res.json())
+    .then(setMethods)
+    .catch(() => setStatus('Unable to connect to payment server.'));
 
-    // Fetch payment history
-    if (applicationId) {
-      fetch(`http://localhost:5000/payment/history/${applicationId}`)
-        .then(res => res.json())
-        .then(setHistory)
-        .catch(() => setHistory([]));
-    }
-  }, [applicationId]);
+  // Fetch payment history
+  if (applicationId) {
+    fetch(`http://localhost:5000/payment/history/${applicationId}`)
+      .then(res => res.json())
+      .then(data => {
+        // Ensure data is always an array
+        if (Array.isArray(data)) {
+          setHistory(data);
+        } else {
+          setHistory([]);
+        }
+      })
+      .catch(() => setHistory([]));
+  }
+}, [applicationId]);
 
   const handleScreenshotChange = (e) => {
     setScreenshot(e.target.files[0]);

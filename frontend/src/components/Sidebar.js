@@ -1,119 +1,116 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Sidebar.css";
+import "./Sidebar.css"; // Ensure this import is correct
 
-const navItems = [
-  { label: "Dashboard", path: "/dashboard", icon: "/dash.png" },
-  { label: "Application Form", path: "/application-form", icon: "/form.png" },
-  { label: "Application Status", path: "/application-status", icon: "/status.png" },
-  { label: "Payment Information", path: "/payment-information", icon: "/payment.png" },
-  { label: "Documents Upload", path: "/document-upload", icon: "/docs.png" },
-  { label: "Messages", path: "/messages", icon: "/message.png" },
-  { label: "Profile", path: "/profile", icon: "/profile.png" },
-  { label: "Settings", path: "/settings", icon: "/settings.png" },
-];
-
+// Fixed green sidebar component using PNG icons and ptclogo
 function FixedGreenSidebar({ onHover, onLeave }) {
-  const navigate = useNavigate();
+  const icons = [
+    { label: "Dashboard", path: "/dashboard", icon: "/dash.png" },
+    { label: "Application Form", path: "/application-form", icon: "/form.png" },
+    { label: "Application Status", path: "/application-status", icon: "/status.png" },
+    { label: "Payment Information", path: "/payment-information", icon: "/payment.png" },
+    { label: "Documents Upload", path: "/document-upload", icon: "/docs.png" },
+    { label: "Messages", path: "/messages", icon: "/message.png" },
+    { label: "Profile", path: "/profile", icon: "/profile.png" },
+  ];
   return (
     <div
       className="fixed-green-sidebar"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      <div className="sidebar-logo-fixed-container">
-        <img src="/ptclogo.png" alt="PTC Logo" className="sidebar-logo-fixed" />
-      </div>
+      <img src="/ptclogo.png" alt="PTC Logo" className="sidebar-logo-fixed" />
       <nav className="sidebar-nav-fixed">
-        {navItems.map((item) => (
-          <button
-            key={item.label}
-            className="sidebar-fixed-icon-btn"
-            onClick={() => navigate(item.path)}
-            title={item.label}
-            tabIndex={0}
-            type="button"
-          >
+        {icons.map((item) => (
+          <a key={item.label} href={item.path} title={item.label}>
             <img
               src={item.icon}
               alt={item.label}
               className="sidebar-fixed-icon"
-              width={28}
-              height={28}
+              style={{ width: 28, height: 28 }}
             />
-          </button>
+          </a>
         ))}
       </nav>
     </div>
   );
 }
 
-function Sidebar({ onExpandChange }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [forceExpand, setForceExpand] = useState(false);
+const buttons = [
+  { label: "Dashboard", path: "/dashboard" },
+  { label: "Application Form", path: "/application-form" },
+  { label: "Application Status", path: "/application-status" },
+  { label: "Payment Information", path: "/payment-information" },
+  { label: "Documents Upload", path: "/document-upload" },
+  { label: "Messages", path: "/messages" },
+  { label: "Profile", path: "/profile" }
+  // Removed Settings
+];
+
+function Sidebar() {
+  const [collapsed, setCollapsed] = useState(true); // Start collapsed by default
+  const [hoveredButton, setHoveredButton] = useState(null); // State for button hover
   const navigate = useNavigate();
 
-  // Notify parent when expanded/collapsed state changes
-  useEffect(() => {
-    if (onExpandChange) {
-      onExpandChange(!collapsed || forceExpand);
-    }
-  }, [collapsed, forceExpand, onExpandChange]);
+  // Handle hover states for the main expanding sidebar
+  const handleMouseEnter = () => setCollapsed(false);
+  const handleMouseLeave = () => setCollapsed(true);
 
-  // Expand sliding sidebar when hovering over fixed sidebar
-  const handleFixedSidebarHover = () => setForceExpand(true);
-  const handleFixedSidebarLeave = () => setForceExpand(false);
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
 
   return (
     <>
       <FixedGreenSidebar
-        onHover={handleFixedSidebarHover}
-        onLeave={handleFixedSidebarLeave}
+        onHover={handleMouseEnter} // Hovering fixed sidebar expands the sliding one
+        onLeave={handleMouseLeave} // Leaving fixed sidebar collapses the sliding one
       />
       <div
-        className={`messages-sidebar${collapsed && !forceExpand ? " collapsed" : ""}`}
-        onMouseEnter={() => setCollapsed(false)}
-        onMouseLeave={() => setCollapsed(true)}
-        style={{ left: 68 }}
+        className={`messages-sidebar ${collapsed ? "collapsed" : ""}`}
+        onMouseEnter={handleMouseEnter} // Keep expand on hover for the sliding sidebar itself
+        onMouseLeave={handleMouseLeave} // Keep collapse on leave for the sliding sidebar itself
+        style={{ left: 68 }} // ensure it sits next to the fixed sidebar
       >
-        {(!collapsed || forceExpand) && (
-          <div className="sidebar-header-sliding">
-            <span className="sidebar-label-sliding">PTC OAMS</span>
+        {/* NEW: Wrapper for content */}
+        <div className="sidebar-content-wrapper">
+          {/* PTC OAMS Text */}
+          <div className="ptc-oams-text">
+            <span style={{ fontWeight: "bold", fontSize: 22, color: "#2c781d", letterSpacing: 1 }}>PTC OAMS</span>
           </div>
-        )}
 
-        <div className="sidebar-nav-sliding">
-          {navItems.map((item) => (
-            <div className="sidebar-btn-row" key={item.label}>
-              <button onClick={() => navigate(item.path)}>
-                {item.label}
+          {/* Navigation Buttons */}
+          {buttons.map((btn) => (
+            <div className="sidebar-btn-row" key={btn.label}>
+              <button
+                onClick={() => navigate(btn.path)}
+                onMouseEnter={() => setHoveredButton(btn.label)}
+                onMouseLeave={() => setHoveredButton(null)}
+                onFocus={() => setHoveredButton(btn.label)}
+                onBlur={() => setHoveredButton(null)}
+                className={hoveredButton === btn.label ? "hovered" : ""}
+              >
+                {btn.label}
               </button>
             </div>
           ))}
-        </div>
 
-        {/* Sign Out Button */}
-        {(!collapsed || forceExpand) && (
-          <div className="sidebar-btn-row" style={{ marginTop: 30 }}>
+          {/* Sign Out Button */}
+          <div className="sidebar-btn-row sign-out-row">
             <button
-              onClick={() => {
-                localStorage.removeItem('application_id');
-                navigate("/", { replace: true });
-              }}
-              style={{
-                color: "#c62828",
-                fontWeight: 700,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: 16,
-                marginLeft: 4,
-              }}
+              onClick={handleSignOut}
+              onMouseEnter={() => setHoveredButton('Sign Out')}
+              onMouseLeave={() => setHoveredButton(null)}
+              onFocus={() => setHoveredButton('Sign Out')}
+              onBlur={() => setHoveredButton(null)}
+              className={`sign-out-button ${hoveredButton === 'Sign Out' ? 'hovered' : ''}`}
             >
               Sign Out
             </button>
           </div>
-        )}
+        </div> {/* END: sidebar-content-wrapper */}
+
       </div>
     </>
   );
