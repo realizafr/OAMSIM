@@ -1,6 +1,7 @@
-import React, { useState } from "react"; // Import useState
+import React, { useState, useEffect } from "react"; // Import useState and useEffect
 import Sidebar from "../components/Sidebar"; // Adjust the path if needed
 import "./Dashboard.css"; // Ensure this CSS file is linked
+import TabBar from "../components/TabBar";  
 import bgImage from './assets/bg.jpg';
 
 // New component for displaying a single announcement detail
@@ -16,15 +17,27 @@ const AnnouncementDetail = ({ title, detail, date, onBack }) => {
   );
 };
 
+
 function Dashboard() {
+  const [profile, setProfile] = useState(null);
   const [currentView, setCurrentView] = useState('dashboard'); // State to manage current view
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null); // State to store selected announcement data
+  
 
   // Function to show announcement details
   const showAnnouncementDetail = (announcement) => {
     setSelectedAnnouncement(announcement);
     setCurrentView('announcementDetail');
   };
+  useEffect(() => {
+    // Fetch profile data when the component mounts
+    const applicationId = localStorage.getItem('application_id');
+    if (!applicationId) return;
+    fetch(`http://localhost:5000/profile/${applicationId}`)
+      .then(res => res.json())
+      .then(data => setProfile(data))
+      .catch(() => setProfile(null));
+  }, []);
 
   // Function to go back to the dashboard
   const backToDashboard = () => {
@@ -126,7 +139,9 @@ We invite prospective students eager to embark on a rewarding career or enhance 
   ];
 
   return (
-    <div className="dashboard-container">
+     <div>
+      <TabBar profile={profile} />
+      <div className="dashboard-container">
       <Sidebar />
       <div className="dashboard-main-content">
         {currentView === 'dashboard' ? (
@@ -279,6 +294,7 @@ We invite prospective students eager to embark on a rewarding career or enhance 
           />
         )}
       </div> {/* End dashboard-main-content */}
+    </div>
     </div>
   );
 }

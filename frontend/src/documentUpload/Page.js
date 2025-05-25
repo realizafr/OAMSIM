@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
+import TabBar from '../components/TabBar'; 
 import './documentsUpload.css';
 
 // const applicationId = localStorage.getItem('application_id');
@@ -31,6 +32,23 @@ const DocumentUpload = () => {
     const [files, setFiles] = useState({});
     const [messages, setMessages] = useState({});
     const [statuses, setStatuses] = useState({});
+    const [profile, setProfile] = useState(null);
+      useEffect(() => {
+    const fetchProfile = async () => {
+        try {
+            const applicationId = localStorage.getItem('application_id');
+            if (!applicationId) return;
+            const res = await fetch(`http://localhost:5000/profile/${applicationId}`);
+            if (res.ok) {
+                const data = await res.json();
+                setProfile(data);
+            }
+        } catch (err) {
+            setProfile(null);
+        }
+    };
+    fetchProfile();
+}, []);
 
     // Fetch initial upload status from backend
     useEffect(() => {
@@ -94,7 +112,9 @@ const DocumentUpload = () => {
     };
 
     return (
-        <div style={{ display: "flex" }}>
+       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+            {/* Only render TabBar when profile is loaded to ensure avatar and name show up immediately */}
+            <TabBar profile={profile} />
             <Sidebar />
             <div className="documents-upload-container">
                 <div className="documents-upload-title">Documents Upload</div>

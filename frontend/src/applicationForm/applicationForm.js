@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
+import TabBar from "../components/TabBar";
 import "./applicationForm.css";
 
 const steps = [
@@ -67,8 +68,11 @@ function ApplicationForm() {
     emergencyContactRelationship: "",
     emergencyContactNumber: "",
   });
+  const [profile, setProfile] = useState(null);
+  
 
   // Fetch lock status and info on mount
+  
   useEffect(() => {
     const storedApplicationId = localStorage.getItem('application_id');
     if (!storedApplicationId) {
@@ -95,7 +99,14 @@ function ApplicationForm() {
         setLoading(false);
         setIsLocked(false);
       });
+
+    // Fetch profile for TabBar
+    fetch(`http://localhost:5000/profile/${storedApplicationId}`)
+      .then(res => res.json())
+      .then(data => setProfile(data))
+      .catch(() => setProfile(null));
   }, []);
+
 
   // Populate formData with lockedInfo for editing
   const handleEditLocked = () => {
@@ -219,6 +230,8 @@ function ApplicationForm() {
   // LOCKED: Only review page, with edit option
   if (isLocked && !editMode) {
     return (
+        <div>
+        <TabBar profile={profile} />
       <div style={{ display: "flex" }}>
         <Sidebar />
         <div className="application-form-container" style={{ background: "#fafcfb", flex: 1 }}>
@@ -333,6 +346,7 @@ function ApplicationForm() {
             </button>
           </div>
         </div>
+      </div>
       </div>
     );
   }

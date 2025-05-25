@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import './paymentInformation.css';
+import TabBar from '../components/TabBar';
 import gcashLogo from './assets/gcash.png';
 import paymayaLogo from './assets/paymaya.png';
 import bankLogo from './assets/bank.jpg';
@@ -13,6 +14,7 @@ function PaymentInformation() {
   const [status, setStatus] = useState('');
   const [screenshot, setScreenshot] = useState(null);
   const [screenshotUrl, setScreenshotUrl] = useState('');
+    const [profile, setProfile] = useState(null);
   const [history, setHistory] = useState([]);
   const applicationId = localStorage.getItem('application_id');
 
@@ -31,12 +33,21 @@ function PaymentInformation() {
         })
         .catch(() => setHistory([]));
     }
+
+    if (applicationId) {
+      fetch(`http://localhost:5000/profile/${applicationId}`)
+        .then(res => res.json())
+        .then(data => setProfile(data))
+        .catch(() => setProfile(null));
+    }
   }, [applicationId]);
+  
 
   const handleScreenshotChange = (e) => {
     setScreenshot(e.target.files[0]);
     setScreenshotUrl(URL.createObjectURL(e.target.files[0]));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,6 +116,10 @@ function PaymentInformation() {
   };
 
   return (
+      <div>
+      <TabBar profile={profile} />
+      <div style={{ display: "flex" }}></div>
+    
     <div style={{ display: "flex" }}>
       <Sidebar />
       <div className="payment-container">
@@ -235,6 +250,7 @@ function PaymentInformation() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
