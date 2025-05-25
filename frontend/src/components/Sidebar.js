@@ -72,7 +72,7 @@ function Sidebar() {
       >
         <div className="sidebar-content-wrapper">
           <div className="ptc-oams-text">
-            <span style={{ fontWeight: "bold", fontSize: 22, color: "#2c781d", letterSpacing: 1, display: "flex", alignItems: "center", justifyContent: "center", height: 38 }}>PTC OAMS</span>
+            <span style={{ fontWeight: "bold", fontSize: 22, color: "#2c781d", letterSpacing: 1, display: "flex", alignItems: "center", justifyContent: "center", height: 38 }}></span>
           </div>
           <div className="sidebar-btns-aligner">
             {buttons.map((btn) => (

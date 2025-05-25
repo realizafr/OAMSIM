@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Sidebar from '../components/Sidebar';
+import TabBar from '../components/TabBar';
 import './messages.css';
 
 function Messages() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [profile, setProfile] = useState(null);
   const applicationId = localStorage.getItem('application_id');
   const messagesEndRef = useRef(null);
 
@@ -26,6 +28,13 @@ function Messages() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+   useEffect(() => {
+    if (!applicationId) return;
+    fetch(`http://localhost:5000/profile/${applicationId}`)
+      .then(res => res.json())
+      .then(data => setProfile(data))
+      .catch(() => setProfile(null));
+  }, [applicationId]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -45,6 +54,8 @@ function Messages() {
   };
 
   return (
+      <div>
+      <TabBar profile={profile} />
     <div className="messages-container">
       {/* Sidebar */}
       <Sidebar />
@@ -101,6 +112,7 @@ function Messages() {
           </div>
         </div>
       </div>
+    </div> 
     </div>
   );
 }

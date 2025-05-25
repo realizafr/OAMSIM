@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import './applicationStatus.css';
 import { useNavigate } from 'react-router-dom';
 import verifiedIcon from './assets/verified.png';
+import TabBar from '../components/TabBar';
 import pendingIcon from './assets/pending.png';
 const STATUS_COLORS = {
   Completed: 'green',
@@ -22,6 +23,7 @@ const ApplicationStatus = () => {
   const [detailsError, setDetailsError] = useState(null);
   const [examSchedule, setExamSchedule] = useState(null);
   const [examLoading, setExamLoading] = useState(true);
+    const [profile, setProfile] = useState(null);
   const applicationId = localStorage.getItem('application_id');
   const navigate = useNavigate();
 
@@ -81,10 +83,22 @@ const ApplicationStatus = () => {
         setExamSchedule(null);
       }
       setExamLoading(false);
+        };
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/profile/${applicationId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProfile(data);
+        }
+      } catch (err) {
+        setProfile(null);
+      }
     };
     fetchStatus();
     fetchDetails();
     fetchExamSchedule();
+      fetchProfile();
   }, [applicationId]);
 
   // Payment status rendering logic
@@ -134,6 +148,9 @@ const ApplicationStatus = () => {
   }
 
   return (
+    <div>
+      <TabBar profile={profile} />
+      <div style={{ display: "flex" }}></div>
     <div style={{ display: "flex" }}>
       <Sidebar />
       <div className="app-status-container">
@@ -236,6 +253,7 @@ const ApplicationStatus = () => {
         </div>
       </div>
     </div>
+     </div>
   );
 };
 
