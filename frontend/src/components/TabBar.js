@@ -11,6 +11,9 @@ function TabBar({ profile }) {
 
   return (
     <nav className="tabbar-topbar">
+      <div className="tabbar-college-name">
+        Pateros Technological College
+      </div>
       <div
         className="tabbar-profilebar"
         onClick={handleClick}

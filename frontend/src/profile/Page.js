@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Tabbar from "../components/TabBar";
-import Sidebar from "../components/Sidebar"; // <-- Import Sidebar
+import Sidebar from "../components/Sidebar"; // Assuming Sidebar can take a 'collapsed' prop
+import "./profile.css"; // Import the CSS file
 
 function Profile() {
   const [profile, setProfile] = useState(null);
@@ -17,6 +18,9 @@ function Profile() {
   const [passwordMsg, setPasswordMsg] = useState("");
   const fileInputRef = useRef();
 
+  // State for sidebar collapse/expand
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false); // New state
+
   const applicationId = localStorage.getItem("application_id");
 
   useEffect(() => {
@@ -28,7 +32,6 @@ function Profile() {
         setProfile(data);
         setProfilePic(data.profile_pic);
 
-        // Set the tab title to the full name
         if (data.first_name && data.last_name) {
           document.title = `${data.first_name} ${data.last_name}`;
         } else if (data.full_name) {
@@ -44,7 +47,6 @@ function Profile() {
     fetchProfile();
   }, [applicationId]);
 
-  // Only allow photo change
   const handlePictureClick = () => {
     setEditMode(true);
     if (fileInputRef.current) {
@@ -60,7 +62,6 @@ function Profile() {
       reader.onloadend = () => setProfilePic(reader.result);
       reader.readAsDataURL(file);
 
-      // Upload to backend
       const formData = new FormData();
       formData.append("profilePic", file);
       try {
@@ -78,7 +79,6 @@ function Profile() {
     }
   };
 
-  // Password modal logic
   const handlePasswordField = e => {
     const { name, value } = e.target;
     setPasswordFields(f => ({ ...f, [name]: value }));
@@ -116,42 +116,62 @@ function Profile() {
 
   if (!profile) return <div>Loading...</div>;
 
-  // Use first_name and last_name directly from profile
   const initials = (profile.first_name?.[0] ?? "") + (profile.last_name?.[0] ?? "");
 
-  // Go to application form
   const handleEditProfile = () => {
     window.location.href = "/application-form";
   };
 
+  // Determine the left margin for the main content based on sidebar collapse state
+  // Assuming 250px for expanded sidebar, and 68px for collapsed sidebar.
+  // These values should match the `width` in .sidebar-container and .sidebar-collapsed classes.
+  const mainContentMarginLeft = isSidebarCollapsed ? 68 : 250;
+
+
   return (
-    <div> 
-      {/* Tab Bar (Top Right) */}
-      <Tabbar profile={{ ...profile, profile_pic: profilePic || profile.profile_pic }} />
-
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content with sidebar */}
-      <div style={{
-        display: "flex",
-        padding: 0,
-        background: "#f8fafc",
-        minHeight: "100vh",
-        fontFamily: "Inter, Arial, sans-serif",
-        marginTop: 56,
-        marginLeft: 68 // <-- Add margin to avoid overlap with Sidebar
-      }}>
-        {/* Sidebar content and main content remain unchanged */}
-        <div style={{
-          width: 350,
-          background: "#fff",
-          borderRight: "1px solid #e5e7eb",
+    <div>
+  
+      <Tabbar
+        profile={{ ...profile, profile_pic: profilePic || profile.profile_pic }}
+        isSidebarCollapsed={isSidebarCollapsed}
+        toggleSidebar={() => setIsSidebarCollapsed(prev => !prev)} // Example toggle/>
+      />
+      <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
+        <div className="profile-page">
+   
+      <div
+        style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "48px 24px 24px 24px"
-        }}>
+          padding: 0,
+          background: "linear-gradient(135deg, #95d891 0%, #137a1c 100%)", // Green gradient background
+          minHeight: "100vh",
+          fontFamily: "Inter, Arial, sans-serif",
+          marginTop: 56, // Account for Tabbar height
+          marginLeft: mainContentMarginLeft, // Dynamically set margin left
+          transition: "margin-left 0.3s ease-in-out" // Smooth transition for margin
+        }}
+      >
+        {/*
+          This div now represents the *content* that moves with the main content area,
+          not the sidebar itself. The actual sidebar is handled by the <Sidebar /> component.
+          You might want to refactor this "sidebar content" into the Sidebar.js component.
+        */}
+        <div
+          // This div should ideally be part of your Sidebar.js component.
+          // For now, it remains here but the styling for the sidebar itself
+          // should come from the .sidebar-container and .sidebar-collapsed classes.
+          // This inner div represents the profile card and security section.
+          style={{
+            width: 350, // Fixed width for this inner content, regardless of sidebar collapse
+            background: "#fff",
+            borderRight: "1px solid #e5e7eb",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "48px 24px 24px 24px",
+            // Remove positioning here as it's now handled by the Sidebar component in its own file
+          }}
+        >
           <div
             onClick={handlePictureClick}
             style={{
@@ -195,83 +215,105 @@ function Profile() {
               />
             )}
             {editMode && (
-              <div style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                background: "rgba(39,214,10,0.85)",
-                color: "#fff",
-                fontSize: 14,
-                textAlign: "center",
-                padding: "4px 0"
-              }}>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  width: "100%",
+                  background: "rgba(39,214,10,0.85)",
+                  color: "#fff",
+                  fontSize: 14,
+                  textAlign: "center",
+                  padding: "4px 0"
+                }}
+              >
                 Change Photo
               </div>
             )}
           </div>
           {/* Full Name */}
-          <h2 style={{
-            margin: 0,
-            fontWeight: 700,
-            fontSize: 22,
-            color: "#222"
-          }}>
+          <h2
+            style={{
+              margin: 0,
+              fontWeight: 700,
+              fontSize: 22,
+              color: "#222"
+            }}
+          >
             {(profile.first_name && profile.last_name)
               ? `${profile.first_name} ${profile.last_name}`
               : profile.full_name || ""}
           </h2>
           {/* Application ID below the name */}
-          <div style={{
-            color: "#888",
-            fontSize: 14,
-            marginBottom: 24,
-            marginTop: 2,
-            fontWeight: 500,
-            letterSpacing: 0.5
-          }}>
+          <div
+            style={{
+              color: "#888",
+              fontSize: 14,
+              marginBottom: 24,
+              marginTop: 2,
+              fontWeight: 500,
+              letterSpacing: 0.5
+            }}
+          >
             {profile.application_id && <>Application ID: {profile.application_id}</>}
           </div>
           {/* Account Security Card */}
-          <div style={{
-            width: "100%",
-            marginTop: 24,
-            background: "#f9fafb",
-            borderRadius: 12,
-            boxShadow: "0 1px 4px #0001",
-            padding: 0,
-          }}>
-            <div style={{
-              padding: "20px 24px 12px 24px",
-              borderBottom: "1px solid #f1f1f1"
-            }}>
-              <div style={{ fontWeight: 700, fontSize: 18, color: "#222" }}>Account Security</div>
-              <div style={{ color: "#888", fontSize: 14, marginTop: 2 }}>Manage your account security settings</div>
+          <div
+            style={{
+              width: "100%",
+              marginTop: 24,
+              background: "#f9fafb",
+              borderRadius: 12,
+              boxShadow: "0 1px 4px #0001",
+              padding: 0
+            }}
+          >
+            <div
+              style={{
+                padding: "20px 24px 12px 24px",
+                borderBottom: "1px solid #f1f1f1"
+              }}
+            >
+              <div style={{ fontWeight: 700, fontSize: 18, color: "#222" }}>
+                Account Security
+              </div>
+              <div style={{ color: "#888", fontSize: 14, marginTop: 2 }}>
+                Manage your account security settings
+              </div>
             </div>
             {/* Password */}
-            <div style={{
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #f1f1f1"
-            }}>
-              <span style={{
-                background: "#e3edfd",
-                color: "#3b82f6",
-                borderRadius: "50%",
-                width: 38,
-                height: 38,
+            <div
+              style={{
+                padding: "18px 24px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: 22,
-                marginRight: 16
-              }}>
-                <i className="fa fa-lock" style={{ fontStyle: "normal" }}>🔒</i>
+                borderBottom: "1px solid #f1f1f1"
+              }}
+            >
+              <span
+                style={{
+                  background: "#e3edfd",
+                  color: "#3b82f6",
+                  borderRadius: "50%",
+                  width: 38,
+                  height: 38,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 22,
+                  marginRight: 16
+                }}
+              >
+                <i className="fa fa-lock" style={{ fontStyle: "normal" }}>
+                  🔒
+                </i>
               </span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, fontSize: 16 }}>Password</div>
-                <div style={{ color: "#888", fontSize: 14 }}>Keep your account secure</div>
+                <div style={{ color: "#888", fontSize: 14 }}>
+                  Keep your account secure
+                </div>
               </div>
               <button
                 type="button"
@@ -284,102 +326,138 @@ function Profile() {
                   fontSize: 15,
                   cursor: "pointer"
                 }}
-              >Change</button>
+              >
+                Change
+              </button>
             </div>
             {/* Email Verification */}
-            <div style={{
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              borderBottom: "1px solid #f1f1f1",
-              opacity: 1,
-              cursor: "default"
-            }}>
-              <span style={{
-                background: "#e6f7ec",
-                color: "#22c55e",
-                borderRadius: "50%",
-                width: 38,
-                height: 38,
+            <div
+              style={{
+                padding: "18px 24px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: 22,
-                marginRight: 16
-              }}>
-                <i className="fa fa-envelope" style={{ fontStyle: "normal" }}>✉️</i>
+                borderBottom: "1px solid #f1f1f1",
+                opacity: 1,
+                cursor: "default"
+              }}
+            >
+              <span
+                style={{
+                  background: "#e6f7ec",
+                  color: "#22c55e",
+                  borderRadius: "50%",
+                  width: 38,
+                  height: 38,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 22,
+                  marginRight: 16
+                }}
+              >
+                <i className="fa fa-envelope" style={{ fontStyle: "normal" }}>
+                  ✉️
+                </i>
               </span>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: 16 }}>Email Verification</div>
-                <div style={{ color: "#888", fontSize: 14 }}>Your email address is verified</div>
+                <div style={{ fontWeight: 600, fontSize: 16 }}>
+                  Email Verification
+                </div>
+                <div style={{ color: "#888", fontSize: 14 }}>
+                  Your email address is verified
+                </div>
               </div>
-              <span style={{
-                background: "#e5e7eb",
-                color: "#888",
-                fontWeight: 600,
-                fontSize: 15,
-                borderRadius: 8,
-                padding: "4px 14px",
-                pointerEvents: "none"
-              }}>Coming soon</span>
+              <span
+                style={{
+                  background: "#e5e7eb",
+                  color: "#888",
+                  fontWeight: 600,
+                  fontSize: 15,
+                  borderRadius: 8,
+                  padding: "4px 14px",
+                  pointerEvents: "none"
+                }}
+              >
+                Coming soon
+              </span>
             </div>
             {/* Phone Verification */}
-            <div style={{
-              padding: "18px 24px",
-              display: "flex",
-              alignItems: "center",
-              opacity: 1,
-              cursor: "default"
-            }}>
-              <span style={{
-                background: "#f3f4f6",
-                color: "#f59e42",
-                borderRadius: "50%",
-                width: 38,
-                height: 38,
+            <div
+              style={{
+                padding: "18px 24px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                fontSize: 22,
-                marginRight: 16
-              }}>
-                <i className="fa fa-phone" style={{ fontStyle: "normal" }}>📞</i>
+                opacity: 1,
+                cursor: "default"
+              }}
+            >
+              <span
+                style={{
+                  background: "#f3f4f6",
+                  color: "#f59e42",
+                  borderRadius: "50%",
+                  width: 38,
+                  height: 38,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 22,
+                  marginRight: 16
+                }}
+              >
+                <i className="fa fa-phone" style={{ fontStyle: "normal" }}>
+                  📞
+                </i>
               </span>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: 16 }}>Phone Verification</div>
-                <div style={{ color: "#888", fontSize: 14 }}>Verify your phone number for added security</div>
+                <div style={{ fontWeight: 600, fontSize: 16 }}>
+                  Phone Verification
+                </div>
+                <div style={{ color: "#888", fontSize: 14 }}>
+                  Verify your phone number for added security
+                </div>
               </div>
-              <span style={{
-                background: "#e5e7eb",
-                color: "#888",
-                fontWeight: 600,
-                fontSize: 15,
-                borderRadius: 8,
-                padding: "4px 14px",
-                pointerEvents: "none"
-              }}>Coming soon</span>
+              <span
+                style={{
+                  background: "#e5e7eb",
+                  color: "#888",
+                  fontWeight: 600,
+                  fontSize: 15,
+                  borderRadius: 8,
+                  padding: "4px 14px",
+                  pointerEvents: "none"
+                }}
+              >
+                Coming soon
+              </span>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div style={{
-          flex: 1,
-          background: "#f8fafc",
-          padding: "48px 0",
-          display: "flex",
-          justifyContent: "center"
-        }}>
-          <div style={{
-            width: 540,
-            background: "#fff",
-            borderRadius: 16,
-            boxShadow: "0 2px 16px #0001",
-            padding: 40,
+        <div
+          style={{
+            flex: 1,
+            background: "transparent", // Let the gradient show through
+            padding: "48px 0",
             display: "flex",
-            flexDirection: "column"
-          }}>
-            <h2 style={{ margin: 0, fontWeight: 700, fontSize: 22 }}>Profile Information</h2>
+            justifyContent: "center"
+          }}
+        >
+          <div
+            style={{
+              width: 540,
+              background: "#fff",
+              borderRadius: 16,
+              boxShadow: "0 2px 16px #0001",
+              padding: 40,
+              display: "flex",
+              flexDirection: "column"
+            }}
+          >
+            <h2 style={{ margin: 0, color: "#555", fontWeight: 700, fontSize: 22 }}>
+              Profile Information
+            </h2>
             <div style={{ marginBottom: 28, color: "#555", fontSize: 15 }}>
               Manage your personal information
             </div>
@@ -465,24 +543,33 @@ function Profile() {
 
         {/* Password Modal */}
         {showPasswordModal && (
-          <div style={{
-            position: "fixed",
-            top: 0, left: 0, right: 0, bottom: 0,
-            background: "rgba(0,0,0,0.18)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}>
-            <div style={{
-              background: "#fff",
-              borderRadius: 14,
-              boxShadow: "0 2px 16px #0002",
-              padding: 32,
-              width: 380,
-              maxWidth: "90vw"
-            }}>
-              <h3 style={{ margin: 0, fontWeight: 700, fontSize: 20 }}>Change Password</h3>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0,0,0,0.18)",
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 14,
+                boxShadow: "0 2px 16px #0002",
+                padding: 32,
+                width: 380,
+                maxWidth: "90vw"
+              }}
+            >
+              <h3 style={{ margin: 0, fontWeight: 700, fontSize: 20 }}>
+                Change Password
+              </h3>
               <form onSubmit={handlePasswordSave} style={{ marginTop: 18 }}>
                 <div>
                   <input
@@ -527,7 +614,9 @@ function Profile() {
                       padding: "10px 24px",
                       cursor: "pointer"
                     }}
-                  >Save</button>
+                  >
+                    Save
+                  </button>
                   <button
                     type="button"
                     onClick={() => setShowPasswordModal(false)}
@@ -541,20 +630,29 @@ function Profile() {
                       padding: "10px 24px",
                       cursor: "pointer"
                     }}
-                  >Cancel</button>
+                  >
+                    Cancel
+                  </button>
                 </div>
                 {passwordMsg && (
-                  <div style={{
-                    color: passwordMsg.includes("success") ? "#1db954" : "red",
-                    marginTop: 14,
-                    fontSize: 15
-                  }}>{passwordMsg}</div>
+                  <div
+                    style={{
+                      color: passwordMsg.includes("success")
+                        ? "#1db954"
+                        : "red",
+                      marginTop: 14,
+                      fontSize: 15
+                    }}
+                  >
+                    {passwordMsg}
+                  </div>
                 )}
               </form>
             </div>
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }
@@ -573,13 +671,13 @@ function inputStyle(editMode) {
     width: "100%",
     padding: "12px 14px",
     borderRadius: 8,
-    border: "1.5px solid #cfd8dc",
+    border: "1.5px solidrgb(7, 165, 68)",
     background: editMode ? "#fff" : "#f2f2f2",
     marginTop: 4,
     fontSize: 16,
     marginBottom: 0,
     outline: "none",
-    transition: "border 0.2s",
+    transition: "border 0.2s"
   };
 }
 
@@ -587,7 +685,7 @@ const modalInputStyle = {
   width: "100%",
   padding: "10px 12px",
   borderRadius: 7,
-  border: "1.5px solid #cfd8dc",
+  border: "1.5px solidrgb(19, 199, 109)",
   background: "#f8fafc",
   fontSize: 15,
   marginBottom: 12,

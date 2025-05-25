@@ -170,6 +170,11 @@
   }
 }
 
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .documents-upload-container {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
+}
+
 .documents-upload-status.verified {
   color: #22b455;
   font-weight: bold;

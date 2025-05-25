@@ -270,6 +270,11 @@
 .payment-history tr:nth-child(even) {
   background: #f8fafc;
 }
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .payment-container {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
+}
+
 
 @media (max-width: 800px) {
   .payment-container {

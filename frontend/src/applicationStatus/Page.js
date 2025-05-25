@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import './applicationStatus.css';
 import { useNavigate } from 'react-router-dom';
-
+import verifiedIcon from './assets/verified.png';
+import pendingIcon from './assets/pending.png';
 const STATUS_COLORS = {
   Completed: 'green',
   Pending: '#b58900',
@@ -136,9 +137,9 @@ const ApplicationStatus = () => {
     <div style={{ display: "flex" }}>
       <Sidebar />
       <div className="app-status-container">
-        {/* --- Application Details Section --- */}
-        <div className="app-details-section" style={{ marginBottom: 32, padding: 16, background: "#50a845",  borderRadius: 10 }}>
-          <h3 style={{ margin: 0, color: "#000000", marginBottom: 8 }}>Application Details</h3>
+        {/* --- Application Details Section (no container) --- */}
+        <div className="app-details-no-container" style={{ marginBottom: 24, marginTop: 10, marginLeft: 60 }}>
+          <h3 style={{ margin: 0, color: "#000000", marginBottom: 8, fontSize: "2.2rem" }}>Application Details</h3>
           {appDetails ? (
             <div>
               <div><strong>Application Number:</strong> {appDetails.application_id}</div>
@@ -153,6 +154,8 @@ const ApplicationStatus = () => {
             <div>Loading application details...</div>
           )}
         </div>
+        {/* --- Beautiful Divider Line --- */}
+        <hr className="details-status-divider" />
         {/* --- End Application Details Section --- */}
 
         <h2 className="app-status-header">Application Status</h2>
@@ -161,8 +164,10 @@ const ApplicationStatus = () => {
           {/* Application Form */}
           <div className={`timeline-step ${status === 'Completed' ? 'completed' : 'active'}`}>
             <span className="timeline-icon">
-              {status === 'Completed' ? '✔️' : '⏳'}
-            </span>
+  {status === 'Completed'
+    ? <img src={verifiedIcon} alt="Verified" className="verified-png" />
+    :  <img src={pendingIcon} alt="Pending" className="verified-png" />}
+</span>
             <div>
               <div className="timeline-title">Application Submitted</div>
               <div className="timeline-desc">
@@ -175,8 +180,10 @@ const ApplicationStatus = () => {
           {/* Document Requirements */}
           <div className={`timeline-step ${docStatus.startsWith('Completed') ? 'completed' : (status === 'Completed' ? 'active' : '')}`}>
             <span className="timeline-icon">
-              {docStatus.startsWith('Completed') ? '✔️' : '⏳'}
-            </span>
+  {docStatus.startsWith('Completed')
+    ? <img src={verifiedIcon} alt="Verified" className="verified-png" />
+    : <img src={pendingIcon} alt="Pending" className="verified-png" />}
+</span>
             <div>
               <div className="timeline-title">Document Requirements</div>
               <div className="timeline-desc">
@@ -197,8 +204,10 @@ const ApplicationStatus = () => {
           {/* Payment */}
           <div className={`timeline-step ${paymentAmountVerified === 1000 ? 'completed' : (docStatus.startsWith('Completed') ? 'active' : '')}`}>
             <span className="timeline-icon">
-              {paymentAmountVerified === 1000 ? '✔️' : '⏳'}
-            </span>
+  {paymentAmountVerified === 1000
+    ? <img src={verifiedIcon} alt="Verified" className="verified-png" />
+    :  <img src={pendingIcon} alt="Pending" className="verified-png" />}
+</span>
             <div>
               <div className="timeline-title">Application Fee Payment</div>
               <div className="timeline-desc">
