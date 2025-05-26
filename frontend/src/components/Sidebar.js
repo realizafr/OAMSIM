@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
+// filepath: c:\Users\judie\Downloads\PROJECT OAMSIM\OAMSIM\frontend\src\components\TabBar.js
+import logo from '../dashboard/assets/logo-ptc.png'; // Adjust path as needed
 
 // Fixed green sidebar component using PNG icons and ptclogo
 function FixedGreenSidebar({ onHover, onLeave }) {

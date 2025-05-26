@@ -1,6 +1,7 @@
 .payment-container {
   max-width: 1000px;
   margin: 40px auto;
+  margin-top: 100px;
   background: #e8f9ee;
   border-radius: 18px;
   box-shadow: 0 4px 24px rgba(44,120,29,0.10);
@@ -275,6 +276,14 @@
     margin-left: 488px; /* 68px fixed + 220px expanded */
 }
 
+.status-pending {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.status-verified {
+  color: #388e3c;
+  font-weight: bold;
+}
 
 @media (max-width: 800px) {
   .payment-container {

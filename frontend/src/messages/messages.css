@@ -1,5 +1,6 @@
 .messages-container {
   display: flex;
+  margin-top: 70px;
   min-height: 60vh;
 }
 

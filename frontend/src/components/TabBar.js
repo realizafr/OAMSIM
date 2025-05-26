@@ -1,5 +1,6 @@
 import React from "react";
 import "./tabbar.css";
+import logo from '../dashboard/assets/logo-ptc.png'; // Adjust path as needed
 
 function TabBar({ profile }) {
   const initials =
@@ -12,6 +13,7 @@ function TabBar({ profile }) {
   return (
     <nav className="tabbar-topbar">
       <div className="tabbar-college-name">
+        <img src={logo} alt="PTC Logo" className="tabbar-ptc-logo" />
         Pateros Technological College
       </div>
       <div

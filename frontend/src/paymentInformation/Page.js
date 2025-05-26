@@ -236,12 +236,20 @@ function PaymentInformation() {
                 </thead>
                 <tbody>
                   {history.map((item) => (
-                    <tr key={item.id}>
+                      <tr key={item.id}>
                       <td>{new Date(item.created_at).toLocaleString()}</td>
                       <td>{item.method}</td>
                       <td>{item.reference_number}</td>
                       <td>₱{Number(item.amount).toLocaleString()}</td>
-                      <td>{item.status}</td>
+                      <td className={
+                        item.status === 'Pending'
+                          ? 'status-pending'
+                          : item.status === 'Verified'
+                            ? 'status-verified'
+                            : ''
+                      }>
+                        {item.status}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
