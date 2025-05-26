@@ -234,7 +234,7 @@ function ApplicationForm() {
         <TabBar profile={profile} />
       <div style={{ display: "flex" }}>
         <Sidebar />
-        <div className="application-form-container" style={{ background: "#fafcfb", flex: 1 }}>
+        <div className="application-form-container" style={{ background: "#fafcfb", flex: 1 ,  marginTop: 100 }}>
           <div className="application-form-title">Application Form</div>
           <div className="application-form-section" style={{ marginBottom: 0 }}>
             <div className="application-form-section-title" style={{ color: "#228c22", fontSize: "1.45rem", marginBottom: 2 }}>
