@@ -69,10 +69,8 @@ function ApplicationForm() {
     emergencyContactNumber: "",
   });
   const [profile, setProfile] = useState(null);
-  
 
   // Fetch lock status and info on mount
-  
   useEffect(() => {
     const storedApplicationId = localStorage.getItem('application_id');
     if (!storedApplicationId) {
@@ -106,7 +104,6 @@ function ApplicationForm() {
       .then(data => setProfile(data))
       .catch(() => setProfile(null));
   }, []);
-
 
   // Populate formData with lockedInfo for editing
   const handleEditLocked = () => {
@@ -230,123 +227,133 @@ function ApplicationForm() {
   // LOCKED: Only review page, with edit option
   if (isLocked && !editMode) {
     return (
-        <div>
+      <div>
         <TabBar profile={profile} />
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <div className="application-form-container" style={{ background: "#fafcfb", flex: 1 ,  marginTop: 100 }}>
-          <div className="application-form-title">Application Form</div>
-          <div className="application-form-section" style={{ marginBottom: 0 }}>
-            <div className="application-form-section-title" style={{ color: "#228c22", fontSize: "1.45rem", marginBottom: 2 }}>
-              Application Submitted
-            </div>
-            <div className="application-form-section-desc" style={{ color: "#228c22", fontWeight: 500, marginBottom: 18 }}>
-              You have already submitted your application. You may review your details below.
-            </div>
-            <div style={{
-              background: "#eafbee",
-              border: "1.5px solid #b7eac7",
-              color: "#228c22",
-              borderRadius: 10,
-              padding: "14px 20px",
-              marginBottom: 32,
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              fontWeight: 500,
-              fontSize: "1.08rem"
-            }}>
-              <span style={{ fontSize: 22, marginRight: 8 }}>🔒</span>
-              <div>
-                <span style={{ fontWeight: 700, fontSize: "1.08rem" }}>Your application is locked</span>
-                <span style={{ color: "#228c22", fontWeight: 400, fontSize: "1rem", display: "block" }}>
-                  If you need to make changes, click <b>Edit &amp; Resubmit</b>.
-                </span>
+        <div style={{ display: "flex" }}>
+          <Sidebar />
+          <div className="application-form-container" style={{ background: "#fafcfb", flex: 1, marginTop: 100 }}>
+            <div className="application-form-title">Application Form</div>
+            <div className="application-form-section" style={{ marginBottom: 0 }}>
+              <div className="application-form-section-title" style={{ color: "#228c22", fontSize: "1.45rem", marginBottom: 2 }}>
+                Application Submitted
               </div>
-            </div>
-            {/* Highlighted Personal Info */}
-            <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
-              <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
-                Personal Information
+              <div className="application-form-section-desc" style={{ color: "#228c22", fontWeight: 500, marginBottom: 18 }}>
+                You have already submitted your application. You may review your details below.
               </div>
               <div style={{
+                background: "#eafbee",
+                border: "1.5px solid #b7eac7",
+                color: "#228c22",
+                borderRadius: 10,
+                padding: "14px 20px",
+                marginBottom: 32,
                 display: "flex",
-                flexWrap: "wrap",
-                gap: "0 32px",
-                marginBottom: 0
+                alignItems: "center",
+                gap: 14,
+                fontWeight: 500,
+                fontSize: "1.08rem"
               }}>
-                <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
-                  <div><span style={{ fontWeight: 700 }}>Full Name:</span> <span style={{ color: "#222" }}>{`${lockedInfo?.first_name || ""} ${lockedInfo?.middle_name || ""} ${lockedInfo?.last_name || ""}`.replace(/\s+/g, " ").trim()}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Phone Number:</span> <span style={{ color: "#222" }}>{lockedInfo?.phone}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Gender:</span> <span style={{ color: "#222" }}>{lockedInfo?.gender}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Complete Address:</span> <span style={{ color: "#222" }}>{lockedInfo?.address}</span></div>
-                </div>
-                <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
-                  <div><span style={{ fontWeight: 700 }}>Email:</span> <span style={{ color: "#222" }}>{lockedInfo?.email}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Birthdate:</span> <span style={{ color: "#222" }}>{lockedInfo?.birthdate ? lockedInfo.birthdate.slice(0, 10) : ""}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Civil Status:</span> <span style={{ color: "#222" }}>{lockedInfo?.civil_status}</span></div>
+                <span style={{ fontSize: 22, marginRight: 8 }}>🔒</span>
+                <div>
+                  <span style={{ fontWeight: 700, fontSize: "1.08rem" }}>Your application is locked</span>
+                  <span style={{ color: "#228c22", fontWeight: 400, fontSize: "1rem", display: "block" }}>
+                    If you need to make changes, click <b>Edit &amp; Resubmit</b>.
+                  </span>
                 </div>
               </div>
-            </div>
-            {/* Highlighted Academic Info */}
-            <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
-              <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
-                Academic Information
-              </div>
-              <div style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "0 32px"
-              }}>
-                <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
-                  <div><span style={{ fontWeight: 700 }}>Last School Attended:</span> <span style={{ color: "#222" }}>{lockedInfo?.last_school_attended}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>School Address:</span> <span style={{ color: "#222" }}>{lockedInfo?.school_address}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>Year Graduated:</span> <span style={{ color: "#222" }}>{lockedInfo?.year_graduated}</span></div>
+              {/* Highlighted Personal Info */}
+              <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
+                <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
+                  Personal Information
                 </div>
-                <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
-                  <div><span style={{ fontWeight: 700 }}>Track/Strand:</span> <span style={{ color: "#222" }}>{lockedInfo?.track_strand}</span></div>
-                  <div><span style={{ fontWeight: 700 }}>General Average:</span> <span style={{ color: "#222" }}>{lockedInfo?.general_average}</span></div>
+                <div style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0 32px",
+                  marginBottom: 0
+                }}>
+                  <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
+                    <div><span style={{ fontWeight: 700 }}>Full Name:</span> <span style={{ color: "#222" }}>{`${lockedInfo?.first_name || ""} ${lockedInfo?.middle_name || ""} ${lockedInfo?.last_name || ""}`.replace(/\s+/g, " ").trim()}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>Phone Number:</span> <span style={{ color: "#222" }}>{lockedInfo?.phone}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>Gender:</span> <span style={{ color: "#222" }}>{lockedInfo?.gender}</span></div>
+                    <div>
+                      <span style={{ fontWeight: 700 }}>Complete Address:</span>{" "}
+                      <span style={{ color: "#222" }}>
+                        {[
+                          lockedInfo?.address,
+                          lockedInfo?.city,
+                          lockedInfo?.province,
+                          lockedInfo?.zip
+                        ].filter(Boolean).join(', ')}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
+                    <div><span style={{ fontWeight: 700 }}>Email:</span> <span style={{ color: "#222" }}>{lockedInfo?.email}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>Birthdate:</span> <span style={{ color: "#222" }}>{lockedInfo?.birthdate ? lockedInfo.birthdate.slice(0, 10) : ""}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>Civil Status:</span> <span style={{ color: "#222" }}>{lockedInfo?.civil_status}</span></div>
+                  </div>
                 </div>
               </div>
+              {/* Highlighted Academic Info */}
+              <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
+                <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
+                  Academic Information
+                </div>
+                <div style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0 32px"
+                }}>
+                  <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
+                    <div><span style={{ fontWeight: 700 }}>Last School Attended:</span> <span style={{ color: "#222" }}>{lockedInfo?.last_school_attended}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>School Address:</span> <span style={{ color: "#222" }}>{lockedInfo?.school_address}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>Year Graduated:</span> <span style={{ color: "#222" }}>{lockedInfo?.year_graduated}</span></div>
+                  </div>
+                  <div style={{ flex: "1 1 320px", minWidth: 260, marginBottom: 8 }}>
+                    <div><span style={{ fontWeight: 700 }}>Track/Strand:</span> <span style={{ color: "#222" }}>{lockedInfo?.track_strand}</span></div>
+                    <div><span style={{ fontWeight: 700 }}>General Average:</span> <span style={{ color: "#222" }}>{lockedInfo?.general_average}</span></div>
+                  </div>
+                </div>
+              </div>
+              {/* Highlighted Program Choices */}
+              <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
+                <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
+                  Program Choices
+                </div>
+                <div>
+                  <div><span style={{ fontWeight: 700 }}>First Choice:</span> <span style={{ color: "#222" }}>{lockedInfo?.first_choice}</span></div>
+                  <div><span style={{ fontWeight: 700 }}>Second Choice:</span> <span style={{ color: "#222" }}>{lockedInfo?.second_choice}</span></div>
+                </div>
+              </div>
+              {/* Highlighted Emergency Contact */}
+              <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
+                <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
+                  Emergency Contact
+                </div>
+                <div>
+                  <div><span style={{ fontWeight: 700 }}>Name:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_name}</span></div>
+                  <div><span style={{ fontWeight: 700 }}>Relationship:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_relationship}</span></div>
+                  <div><span style={{ fontWeight: 700 }}>Contact Number:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_number}</span></div>
+                </div>
+              </div>
+              <button
+                className="application-form-button"
+                style={{
+                  width: 220,
+                  marginTop: 18,
+                  background: "linear-gradient(135deg, #22b455 60%, #1a7c2c 100%)",
+                  fontSize: "1.13rem",
+                  boxShadow: "0 2px 12px rgba(44, 120, 29, 0.10)"
+                }}
+                onClick={handleEditLocked}
+                type="button"
+              >
+                Edit &amp; Resubmit
+              </button>
             </div>
-            {/* Highlighted Program Choices */}
-            <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
-              <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
-                Program Choices
-              </div>
-              <div>
-                <div><span style={{ fontWeight: 700 }}>First Choice:</span> <span style={{ color: "#222" }}>{lockedInfo?.first_choice}</span></div>
-                <div><span style={{ fontWeight: 700 }}>Second Choice:</span> <span style={{ color: "#222" }}>{lockedInfo?.second_choice}</span></div>
-              </div>
-            </div>
-            {/* Highlighted Emergency Contact */}
-            <div className="application-form-section-highlight" style={{ marginBottom: 18 }}>
-              <div className="application-form-section-title" style={{ color: "#1a7c2c", fontSize: "1.18rem", marginBottom: 12 }}>
-                Emergency Contact
-              </div>
-              <div>
-                <div><span style={{ fontWeight: 700 }}>Name:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_name}</span></div>
-                <div><span style={{ fontWeight: 700 }}>Relationship:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_relationship}</span></div>
-                <div><span style={{ fontWeight: 700 }}>Contact Number:</span> <span style={{ color: "#222" }}>{lockedInfo?.emergency_contact_number}</span></div>
-              </div>
-            </div>
-            <button
-              className="application-form-button"
-              style={{
-                width: 220,
-                marginTop: 18,
-                background: "linear-gradient(135deg, #22b455 60%, #1a7c2c 100%)",
-                fontSize: "1.13rem",
-                boxShadow: "0 2px 12px rgba(44, 120, 29, 0.10)"
-              }}
-              onClick={handleEditLocked}
-              type="button"
-            >
-              Edit &amp; Resubmit
-            </button>
           </div>
         </div>
-      </div>
       </div>
     );
   }
@@ -502,7 +509,6 @@ function ApplicationForm() {
                     <option value="">Select status</option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
-                    <option value="Widowed">Widowed</option>
                   </select>
                   {errors.civilStatus && <span className="application-form-required">{errors.civilStatus}</span>}
                 </label>
@@ -513,7 +519,27 @@ function ApplicationForm() {
                 </label>
                 <label className="application-form-label">
                   <span>City/Municipality <span className="application-form-required">*</span></span>
-                  <input className="application-form-input" type="text" name="city" value={formData.city} onChange={handleChange} required />
+                  <select
+                    className="application-form-select"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select City/Municipality</option>
+                    <option value="Pateros">Pateros</option>
+                    <option value="Taguig">Taguig City</option>
+                    <option value="Makati">Makati City</option>
+                    <option value="Pasig">Pasig City</option>
+                    <option value="Caloocan">Caloocan City</option>
+                    <option value="Las Piñas">Las Piñas City</option>
+                    <option value="Malabon">Malabon City</option>
+                    <option value="Mandaluyong">Mandaluyong City</option>
+                    <option value="Marikina">Marikina City</option>
+                    <option value="Parañaque">Parañaque City</option>
+                    <option value="Pasay">Pasay City</option>
+                    <option value="Quezon">Quezon City</option>
+                  </select>
                   {errors.city && <span className="application-form-required">{errors.city}</span>}
                 </label>
                 <label className="application-form-label">
@@ -596,6 +622,7 @@ function ApplicationForm() {
                     onChange={handleChange}
                     required
                   >
+                    <option value="">Select program</option>
                     {programOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -613,6 +640,7 @@ function ApplicationForm() {
                     onChange={handleChange}
                     required
                   >
+                    <option value="">Select program</option>
                     {programOptions
                       .filter((option) => option.value !== formData.firstChoice)
                       .map((option) => (
@@ -655,10 +683,18 @@ function ApplicationForm() {
                   marginBottom: 8
                 }}>
                   <div style={{ flex: "1 1 320px", minWidth: 260 }}>
-                    <div><b>Full Name:</b> {`${formData.firstName} ${formData.middleName} ${formData.lastName}`.replace(/\s+/g, " ").trim()}</div>
+                    <div><b>Full Name:</b> {`${formData.firstName} ${formData.middleName}. ${formData.lastName}`.replace(/\s+/g, " ").trim()}</div>
                     <div><b>Phone Number:</b> {formData.phone}</div>
                     <div><b>Gender:</b> {formData.gender}</div>
-                    <div><b>Complete Address:</b> {formData.address}</div>
+                    <div>
+                      <b>Complete Address:</b>{" "}
+                      {[
+                        formData.address,
+                        formData.city,
+                        formData.province,
+                        formData.zip
+                      ].filter(Boolean).join(', ')}
+                    </div>
                   </div>
                   <div style={{ flex: "1 1 320px", minWidth: 260 }}>
                     <div><b>Email:</b> {formData.email}</div>
@@ -732,11 +768,11 @@ function ApplicationForm() {
             style={{
               display: "flex",
               alignItems: "center",
-               justifyContent: "flex-end",
+              justifyContent: "flex-end",
               marginTop: 32,
               width: "100%",
               maxWidth: 900,
-              gap: 270,  
+              gap: 270,
             }}
           >
             {step > 0 ? (
@@ -768,7 +804,7 @@ function ApplicationForm() {
             )}
 
             {/* Invisible spacer div between buttons */}
-            <div style={{ width: 80,  color: "#fff"}} /> {/* Adjust width here as needed */}
+            <div style={{ width: 80, color: "#fff" }} />
 
             {step < steps.length - 1 && (
               <button
@@ -789,7 +825,7 @@ function ApplicationForm() {
                   gap: 8,
                   boxShadow: "0 2px 8px rgba(44, 120, 29, 0.08)",
                   transition: "background 0.2s, color 0.2s",
-                   marginLeft: step > 0 ? 18 : 0, // space if Previous is visible
+                  marginLeft: step > 0 ? 18 : 0,
                 }}
                 onClick={nextStep}
               >

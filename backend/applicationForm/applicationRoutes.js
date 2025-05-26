@@ -21,9 +21,9 @@ db.connect((err) => {
 // Submit Route (update as needed)
 router.post('/submit', (req, res) => {
   const { 
-    firstName, lastName, email, phone, address, city, province, zip, birthdate, gender, civilStatus, 
+    firstName, middleName, lastName, email, phone, address, city, province, zip, birthdate, gender, civilStatus, 
     lastSchoolAttended, schoolAddress, yearGraduated, trackStrand, generalAverage, 
-    firstChoice, secondChoice, emergencyContactName, emergencyContactNumber, emergencyContactRelationship,application_id
+    firstChoice, secondChoice, emergencyContactName, emergencyContactNumber, emergencyContactRelationship, application_id
   } = req.body;
 
   if (!application_id) {
@@ -33,17 +33,17 @@ router.post('/submit', (req, res) => {
   // Update student_info table with submitted data
   const query = `
     UPDATE student_info 
-    SET first_name = ?, last_name = ?, email = ?, phone = ?, address = ?, city = ?, province = ?, zip = ?, 
+    SET first_name = ?, middle_name = ?, last_name = ?, email = ?, phone = ?, address = ?, city = ?, province = ?, zip = ?, 
     birthdate = ?, gender = ?, civil_status = ?, 
     last_school_attended = ?, school_address = ?, year_graduated = ?, track_strand = ?, general_average = ?, 
-    first_choice = ?, second_choice = ?, emergency_contact_name = ?, emergency_contact_number = ?,emergency_contact_relationship = ?
+    first_choice = ?, second_choice = ?, emergency_contact_name = ?, emergency_contact_number = ?, emergency_contact_relationship = ?
     WHERE application_id = ?
   `;
 
   db.query(query, [
-    firstName, lastName, email, phone, address, city, province, zip, birthdate, gender, civilStatus, 
+    firstName, middleName, lastName, email, phone, address, city, province, zip, birthdate, gender, civilStatus, 
     lastSchoolAttended, schoolAddress, yearGraduated, trackStrand, generalAverage, 
-    firstChoice, secondChoice,  emergencyContactName, emergencyContactNumber, emergencyContactRelationship, application_id
+    firstChoice, secondChoice, emergencyContactName, emergencyContactNumber, emergencyContactRelationship, application_id
   ], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Submit Database error', details: err });
@@ -60,7 +60,7 @@ router.get('/application-status/:applicationId', (req, res) => {
   const { applicationId } = req.params;
 
   db.query(
-    `SELECT first_name, last_name, email, phone, address, city, province, zip, birthdate, gender, civil_status, last_school_attended, school_address, year_graduated, track_strand, general_average, first_choice, second_choice
+    `SELECT first_name, middle_name, last_name, email, phone, address, city, province, zip, birthdate, gender, civil_status, last_school_attended, school_address, year_graduated, track_strand, general_average, first_choice, second_choice
      FROM student_info WHERE application_id = ?`,
     [applicationId],
     (err, result) => {
@@ -76,7 +76,7 @@ router.get('/application-status/:applicationId', (req, res) => {
       // Check if any required field is missing or empty
       const info = result[0];
       const requiredFields = [
-        'first_name', 'last_name', 'email', 'phone', 'address', 'city', 'province', 'zip',
+        'first_name','middle_name', 'last_name', 'email', 'phone', 'address', 'city', 'province', 'zip',
         'birthdate', 'gender', 'civil_status', 'last_school_attended', 'school_address',
         'year_graduated', 'track_strand', 'general_average', 'first_choice', 'second_choice'
       ];
