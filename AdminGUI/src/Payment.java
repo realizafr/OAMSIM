@@ -50,9 +50,9 @@ public class Payment {
         JButton rejectedBtn = new JButton("Rejected");
 
         verifiedBtn.addActionListener(e -> {
-            boolean updated = updatePaymentStatus(applicationId, "verified");
+            boolean updated = updatePaymentStatus(applicationId, "Verified");
             if (updated) {
-                JOptionPane.showMessageDialog(paymentFrame, "Payment marked as VERIFIED.");
+                JOptionPane.showMessageDialog(paymentFrame, "Payment has been VERIFIED.");
                 paymentFrame.dispose();
             } else {
                 JOptionPane.showMessageDialog(paymentFrame, "Failed to update payment status.");
@@ -60,7 +60,7 @@ public class Payment {
         });
 
         rejectedBtn.addActionListener(e -> {
-            boolean updated = updatePaymentStatus(applicationId, "rejected");
+            boolean updated = updatePaymentStatus(applicationId, "Rejected");
             if (updated) {
                 JOptionPane.showMessageDialog(paymentFrame, "Payment marked as REJECTED.");
                 paymentFrame.dispose();
