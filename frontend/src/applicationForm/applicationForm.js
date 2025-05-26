@@ -360,6 +360,8 @@ function ApplicationForm() {
 
   // Main Form (edit or new)
   return (
+    <div>
+        <TabBar profile={profile} />
     <div style={{ display: "flex" }}>
       <Sidebar />
       <div className="application-form-container" style={{ flex: 1 }}>
@@ -861,6 +863,7 @@ function ApplicationForm() {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 }

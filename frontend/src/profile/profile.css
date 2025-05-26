@@ -1,36 +1,9 @@
 
-.sidebar-container {
-  width: 250px; /* Default expanded width */
-  transition: width 0.3s ease-in-out; /* Smooth transition for width */
-  background: #fff;
-  border-right: 1px solid #e5e7eb;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48px 24px 24px 24px;
-  position: fixed; /* Make the sidebar fixed */
-  height: calc(100vh - 56px); /* Adjust height based on Tabbar height */
-  top: 56px; /* Position below the Tabbar */
-  left: 0;
-  z-index: 999; /* Ensure it's above other content */
-}
-.sidebar-container.collapsed {
-  width: 68px; /* Collapsed width */
-}
-
-
-.sidebar-collapsed {
-  width: 68px; /* Collapsed width */
-}
-
 /* Existing styles below this line (from your original profile.css) */
 .profile-main-container {
   background: #6ceb81;
   min-height: 100vh;
   padding: 40px 0;
-}
-.messages-sidebar:not(.collapsed) ~ .profile-page{
-  margin-left: 300px; /* 68px fixed + 220px expanded */
 }
 
 .profile-header {
@@ -310,6 +283,7 @@
   box-shadow: 0 2px 12px rgba(44, 120, 29, 0.13);
 }
 
-.messages-sidebar:not(.collapsed) ~ .profile-page{
-  margin-left: 120px; /* 68px fixed + 220px expanded */
+/* When messages-sidebar is expanded, push main content further right */
+.messages-sidebar:not(.collapsed) + .profile-page {
+    margin-left: 488px; /* 68px fixed + 220px expanded */
 }
