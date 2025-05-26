@@ -30,12 +30,22 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// GET profile info (include profile_pic)
+// GET profile info (include profile_pic and birthdate as string)
 router.get('/:applicationid', async (req, res) => {
   try {
     const { applicationid } = req.params;
     const [rows] = await db.query(
-      `SELECT CONCAT(first_name, ' ', last_name) AS full_name, email, birthdate, address, phone, profile_pic FROM student_info WHERE application_id = ?`,
+      `SELECT 
+        application_id,
+        first_name, 
+        last_name, 
+        CONCAT(first_name, ' ', last_name) AS full_name, 
+        email, 
+        phone, 
+        address, 
+        profile_pic, 
+        DATE_FORMAT(birthdate, '%Y-%m-%d') AS birthdate
+      FROM student_info WHERE application_id = ?`,
       [applicationid]
     );
     if (rows.length === 0) {
