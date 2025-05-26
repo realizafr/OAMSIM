@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  z-index: 1; /* Lower than sidebar/sliding bar */
+  z-index: 1001; /* Lower than sidebar/sliding bar */
   box-shadow: 0 2px 8px #0001;
   padding: 0 32px;
   margin-left: 0;
