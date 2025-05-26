@@ -12,9 +12,8 @@ function FixedGreenSidebar({ onHover, onLeave }) {
     { label: "Application Status", path: "/application-status", icon: "/status.png" },
     { label: "Payment Information", path: "/payment-information", icon: "/payment.png" },
     { label: "Documents Upload", path: "/document-upload", icon: "/docs.png" },
-     { label: "Profile", path: "/profile", icon: "/profile.png" },
     { label: "Messages", path: "/messages", icon: "/message.png" },
-   
+    { label: "Profile", path: "/profile", icon: "/profile.png" },
   ];
   return (
     <div
@@ -44,9 +43,8 @@ const buttons = [
   { label: "Application Status", path: "/application-status" },
   { label: "Payment Information", path: "/payment-information" },
   { label: "Documents Upload", path: "/document-upload" },
-  { label: "Profile", path: "/profile" },
   { label: "Messages", path: "/messages" },
-
+  { label: "Profile", path: "/profile" }
 ];
 
 function Sidebar() {
@@ -72,7 +70,7 @@ function Sidebar() {
         className={`messages-sidebar ${collapsed ? "collapsed" : ""}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        // Removed the inline style={{ left: 70 }} to let CSS control positioning
+        style={{ left: 68 }}
       >
         <div className="sidebar-content-wrapper">
           <div className="ptc-oams-text">
