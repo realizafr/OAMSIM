@@ -21,7 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 18px;
+  padding-top: 18px; /* Original padding-top */
   box-shadow: none;
   border-right: none;
   backdrop-filter: none;
@@ -30,49 +30,69 @@ body {
 .sidebar-logo-fixed {
   width: 38px;
   height: 38px;
-  margin-bottom: 24px;
+  margin-bottom: 24px; /* Original margin-bottom */
+  margin-top: 0px;
   border-radius: 50%;
   background: #fff;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Ensures vertical centering of content */
+  justify-content: center; /* Ensures horizontal centering of content */
   font-weight: bold;
   color: #d3dfd7;
   font-size: 1.3rem;
   box-shadow: 0 2px 8px rgba(44, 120, 29, 0.10);
+}
+.sidebar-nav-fixed a:hover,
+.sidebar-nav-fixed a:focus {
+  background: rgba(44, 120, 29, 0.13);
+  color: #1db954;
+}
+.sidebar-logo-fixed img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 
 .sidebar-nav-fixed {
   display: flex;
   flex-direction: column;
-  gap: 18px; /* Must match .sidebar-btns-aligner gap */
+  gap: 18px;
   margin-top: 25px;
+  width: 100%;
+  align-items: flex-start;
 }
 
 .sidebar-nav-fixed a {
   color: #fff;
   text-decoration: none;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   transition: color 0.18s;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 47px; /* Must match .sidebar-btn-row button min-height */
+  height: 50px;
+  width: 100%;
+  padding-left: 19px;
+  box-sizing: border-box;
 }
 
 .sidebar-fixed-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
+  margin-right: 10px;
+  margin-left: 0;
+  display: block;
 }
 
 /* Expanding Sidebar (messages-sidebar) Styles */
 .messages-sidebar {
   position: fixed !important;
-  top: 20;
-  left: 68px;
-  height: 100vh;
+  top: 0; /* Aligned to the very top */
+  left: 68px; /* Adjusted to 68px for perfect alignment with fixed sidebar width */
+  height: 200vh;
   background: linear-gradient(135deg, rgba(248, 250, 249, 0.3) 10%, rgba(226, 226, 226, 0.05) 90%) !important;
   box-shadow: none !important;
   border-left: none !important;
@@ -83,7 +103,7 @@ body {
   overflow: hidden;
   user-select: none;
   width: 220px;
-  padding: 18px 30px 280px 30px; /* padding-top matches .fixed-green-sidebar */
+  padding: 18px 30px 280px 30px; /* Adjusted padding-top to 18px */
   opacity: 1;
   pointer-events: auto;
   transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
@@ -106,11 +126,11 @@ body {
   text-align: center;
   opacity: 1;
   transition: opacity 0.3s ease-out;
-  height: 38px; /* Matches .sidebar-logo-fixed */
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 35px; /* Matches .sidebar-logo-fixed margin-bottom */
+  margin-bottom: 40px;
 }
 
 .messages-sidebar.collapsed .ptc-oams-text {
@@ -122,7 +142,7 @@ body {
 .sidebar-btns-aligner {
   display: flex;
   flex-direction: column;
-  gap: 0px; /* Matches .sidebar-nav-fixed gap */
+  gap: 0px;
 }
 
 /* Sidebar Button Rows */
@@ -130,7 +150,7 @@ body {
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 0px; /* Matches .sidebar-nav-fixed a height */
+  min-height: 0px;
   opacity: 1;
   transition: opacity 0.3s ease-out;
 }
@@ -148,8 +168,8 @@ body {
   width: 100%;
   background: none;
   border: none;
-  padding: 0 0 0 5px;      /* Increase left padding if desired */
-  font-size: 1rem;       /* Increase font size */
+  padding: 0 0 0 5px;
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: #3f423e;
@@ -158,7 +178,7 @@ body {
   transition: background 0.15s cubic-bezier(0.4,0,0.2,1),
               color 0.15s cubic-bezier(0.4,0,0.2,1),
               box-shadow 0.15s cubic-bezier(0.4,0,0.2,1);
-  min-height: 0px;         /* Increase button height */
+  min-height: 0px;
 }
 
 .sidebar-btn-row button span {
@@ -191,12 +211,11 @@ body {
 .sidebar-btn-row button.active {
   background: #2c781d;
   color: #ffffff;
-  border-bottom: none;
 }
 
 /* Sign Out Button Specific Styles */
 .sign-out-row {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .sign-out-button {
@@ -223,5 +242,3 @@ body {
     margin-left: calc(68px + 220px + 20px);
   }
 }
-
-

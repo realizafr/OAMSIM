@@ -70,7 +70,7 @@ router.post('/submit', (req, res) => {
   }
   db.query(
     'INSERT INTO payments (application_id, method, reference_number, amount, status) VALUES (?, ?, ?, ?, ?)',
-    [application_id, method, reference_number, amount, 'pending'],
+    [application_id, method, reference_number, amount, 'Pending'],
     (err, result) => {
       if (err) return res.status(500).json({ error: 'Database error' });
       res.status(201).json({ message: 'Payment submitted. Awaiting verification.' });
